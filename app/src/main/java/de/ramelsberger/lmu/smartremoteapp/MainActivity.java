@@ -2,6 +2,7 @@ package de.ramelsberger.lmu.smartremoteapp;
 
 import android.content.ClipData;
 import android.content.ClipDescription;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -107,6 +108,10 @@ public class MainActivity extends AppCompatActivity  {
             imageButtons[buttonObjects.get(i).getButtonPosition()].setImageResource(buttonObjects.get(i).getImageId());
             imageButtons[buttonObjects.get(i).getButtonPosition()].setTag(buttonObjects.get(i).getButtonPosition());
         }
+
+        mNsdManager = (NsdManager)getSystemService(Context.NSD_SERVICE);
+        initializeDiscoveryListener();
+        mNsdManager.discoverServices("_http._tcp.", NsdManager.PROTOCOL_DNS_SD, mDiscoveryListener);
     }
 
     @Override
