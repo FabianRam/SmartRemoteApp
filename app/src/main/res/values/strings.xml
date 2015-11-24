@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">SmartRemoteApp</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_main2">Main2Activity</string>
+
+    <string name="edit_text_name" >Button name</string>
+    <string name="edit_text_actoin_name" >Action name</string>
+    <string name="positionTextView">Position:</string>
+    <string name="NameOfButton">Name of the Button</string>
+
+
+</resources>

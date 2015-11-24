@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="icon_array">
+        <item>Coffee Icon</item>
+        <item>Light Icon</item>
+        <item>Music Icon</item>
+        <item>table lamp blue</item>
+        <item>table lamp green</item>
+        <item>table lamp turquoise</item>
+        <item>table lamp yellow</item>
+        <item>table lamp red</item>
+    </string-array>
+    <string-array name="position_array">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+    </string-array>
+</resources>
