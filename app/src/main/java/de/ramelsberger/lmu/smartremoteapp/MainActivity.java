@@ -1,16 +1,12 @@
 package de.ramelsberger.lmu.smartremoteapp;
 
 import android.content.ClipData;
-import android.content.ClipDescription;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.net.nsd.NsdManager;
 import android.net.nsd.NsdServiceInfo;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -19,10 +15,9 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
+
+import org.json.JSONArray;
 
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -31,11 +26,13 @@ import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 
-import static de.ramelsberger.lmu.smartremoteapp.R.id.imageButton;
-import static de.ramelsberger.lmu.smartremoteapp.R.id.imageButton4;
-import static de.ramelsberger.lmu.smartremoteapp.R.id.imageButton5;
-
 public class MainActivity extends AppCompatActivity  {
+
+    public static final String BLUE_COLOR = "#334D5C";
+    public static final String ORANGE_COLOR = "#E27A3F";
+    public static final String RED_COLOR = "#DF4949";
+    private static String LIGHT_COLOR = RED_COLOR;
+
 
     private static ArrayList<ButtonObject> buttonObjects;
 
@@ -77,11 +74,7 @@ public class MainActivity extends AppCompatActivity  {
             }
         });
 
-        // Creates a new ImageView
-        for (final ImageButton imageButton : imageButtons) {
-            imageButton.setOnTouchListener(new MyTouchListener());
-            imageButton.setOnDragListener(new MyDragListener());
-        }
+
         for(int i=0;i<imageButtons.length;i++){
             imageButtons[i].setTag(i);
         }
@@ -102,8 +95,8 @@ public class MainActivity extends AppCompatActivity  {
                 buttonObjects.add(newButtonObject);
 
             }
-        }else{
         }
+        
         for(int i=0;i<buttonObjects.size();i++){
             imageButtons[buttonObjects.get(i).getButtonPosition()].setImageResource(buttonObjects.get(i).getImageId());
             imageButtons[buttonObjects.get(i).getButtonPosition()].setTag(buttonObjects.get(i).getButtonPosition());
@@ -136,21 +129,49 @@ public class MainActivity extends AppCompatActivity  {
         return super.onOptionsItemSelected(item);
     }
 
-    private final class MyTouchListener implements View.OnTouchListener {
-        public boolean onTouch(View view, MotionEvent motionEvent) {
-            if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                for (int i=0;i<buttonObjects.size();i++) {
-                    if (view.getTag() == buttonObjects.get(i).getButtonPosition())
-                        draggedButtonObject = buttonObjects.get(i);
-                }
-                ClipData data = ClipData.newPlainText("", "");
-                View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(view);
-                view.startDrag(data, shadowBuilder, view, 0);
-                view.setVisibility(View.INVISIBLE);
-                return true;
-            } else {
-                return false;
+    private final class MyLongTouchListener implements View.OnLongClickListener {
+
+        @Override
+        public boolean onLongClick(View view) {
+            for (int i=0;i<buttonObjects.size();i++) {
+                if (view.getTag() == buttonObjects.get(i).getButtonPosition())
+                    draggedButtonObject = buttonObjects.get(i);
             }
+            ClipData data = ClipData.newPlainText("", "");
+            View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(view);
+            view.startDrag(data, shadowBuilder, view, 0);
+            view.setVisibility(View.INVISIBLE);
+
+            return false;
+        }
+    }
+
+    private class StartActionTouchListener implements View.OnTouchListener {
+        @Override
+        public boolean onTouch(View view, MotionEvent motionEvent) {
+            //TODO call action
+            for (int i=0;i<buttonObjects.size();i++) {
+                if (view.getTag() == buttonObjects.get(i).getButtonPosition())
+                {
+                    switch (buttonObjects.get(i).getButtonPosition()){
+                        case 1:
+                            LIGHT_COLOR=RED_COLOR;
+                            break;
+
+                        case 2:
+                            LIGHT_COLOR=BLUE_COLOR;
+                            break;
+
+                        default:
+                            LIGHT_COLOR=ORANGE_COLOR;
+                            break;
+                    }
+                    break;
+                }
+            }
+
+            socket.emit("setLight", LIGHT_COLOR);
+            return false;
         }
     }
 
@@ -165,7 +186,6 @@ public class MainActivity extends AppCompatActivity  {
 
             @Override
             public void onServiceFound(NsdServiceInfo service) {
-                // A service was found!  Do something with it.
                 Log.i("service", service.toString());
                 if(service.getServiceName().equals("Smart-Remote-Server")){
                     if(mNsdManager!=null){
@@ -182,6 +202,8 @@ public class MainActivity extends AppCompatActivity  {
                                 setupSocketIO();
                                 mNsdManager.stopServiceDiscovery(mDiscoveryListener);
                                 Log.i("service resolved", "Resolve Succeeded. " + serviceInfo);
+
+
                             }
                         });
                     }
@@ -223,6 +245,8 @@ public class MainActivity extends AppCompatActivity  {
                 @Override
                 public void call(Object... args) {
                     Log.i("INFO", "connected");
+                    //StartListener
+                    onInitializeButtonListeners();
                 }
             }).on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
 
@@ -231,9 +255,27 @@ public class MainActivity extends AppCompatActivity  {
                 }
 
             });
+            socket.on("devices", new Emitter.Listener() {
+
+                @Override
+                public void call(Object... args) {
+                    JSONArray jArray = (JSONArray)args[0];
+                }
+            });
+
             socket.connect();
         } catch (URISyntaxException e) {
             e.printStackTrace();
+        }
+    }
+
+    //------------------------------------------------ listeners
+
+    private void onInitializeButtonListeners() {
+        for (final ImageButton imageButton : imageButtons) {
+            imageButton.setOnTouchListener(new StartActionTouchListener());
+            imageButton.setOnLongClickListener(new MyLongTouchListener());
+            imageButton.setOnDragListener(new MyDragListener());
         }
     }
 
@@ -274,4 +316,6 @@ public class MainActivity extends AppCompatActivity  {
 
 
 }
+
+
 }

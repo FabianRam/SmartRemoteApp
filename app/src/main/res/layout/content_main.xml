@@ -24,7 +24,8 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:id="@+id/imageButton"
-                android:layout_weight="1"/>
+                android:layout_weight="1"
+                />
 
             <ImageButton
                 android:layout_width="fill_parent"
