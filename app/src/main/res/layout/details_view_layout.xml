@@ -186,7 +186,7 @@
 
 
         <Button
-            android:id="@+id/accept_button"
+            android:id="@+id/detailsBackButton"
             android:layout_width="200dp"
             android:layout_height="fill_parent"
             android:layout_gravity="center_horizontal"
@@ -198,7 +198,7 @@
             android:textSize="20dp" />
 
         <Button
-            android:id="@+id/button3"
+            android:id="@+id/accept_button"
             android:layout_width="200dp"
             android:layout_height="fill_parent"
             android:layout_gravity="center_horizontal"
@@ -207,7 +207,7 @@
             android:background="@color/orange"
             android:textColor="@color/white"
             android:layout_weight="1"
-            android:layout_toRightOf="@+id/accept_button"
+            android:layout_toRightOf="@+id/detailsBackButton"
             android:textSize="20dp" />
     </RelativeLayout >
 

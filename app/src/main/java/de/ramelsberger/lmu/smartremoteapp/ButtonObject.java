@@ -1,7 +1,6 @@
 package de.ramelsberger.lmu.smartremoteapp;
 
 import android.os.Parcel;
-import android.os.Parcelable;
 
 import java.io.Serializable;
 
@@ -16,13 +15,12 @@ public class ButtonObject implements Serializable {
     private int buttonPosition;
 
 
-    public ButtonObject(int imageId,int buttonPosition,String buttonText, String actionText){
-        this.imageId=imageId;
+    public ButtonObject(int imageId, int buttonPosition, String buttonText, String actionText) {
+        this.imageId = imageId;
         this.buttonPosition = buttonPosition;
-        this.buttonText=buttonText;
-        this.actionText=actionText;
+        this.buttonText = buttonText;
+        this.actionText = actionText;
     }
-
 
 
     //-------------------------------- getter and setter

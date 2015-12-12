@@ -4,25 +4,20 @@ import android.app.Activity;
 import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.net.nsd.NsdManager;
 import android.net.nsd.NsdServiceInfo;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.DragEvent;
-import android.view.MotionEvent;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.ImageButton;
 
 import org.json.JSONArray;
 
-import java.lang.reflect.Type;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 
@@ -60,13 +55,12 @@ public class MainActivity extends Activity {
         //--------------------- setup costum font
 
 
-
         //---------------------
 
         //TODO
-       // Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        // Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         //setSupportActionBar(toolbar);
-        thisActivity =this;
+        thisActivity = this;
         imageButtons =
                 new ImageButton[]{
                         (ImageButton) this.findViewById(R.id.imageButton),
@@ -81,27 +75,27 @@ public class MainActivity extends Activity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent1= new Intent(thisActivity,DetailsView.class);
+                Intent intent1 = new Intent(thisActivity, ButtonChooser.class);
                 startActivity(intent1);
             }
         });
 
 
-        for(int i=0;i<imageButtons.length;i++){
+        for (int i = 0; i < imageButtons.length; i++) {
             imageButtons[i].setTag(i);
         }
 
         Bundle bundle = getIntent().getExtras();
 
         //Get saved buttonObject from DetailsView
-        if(buttonObjects==null)
-        buttonObjects=new ArrayList<ButtonObject>();
+        if (buttonObjects == null)
+            buttonObjects = new ArrayList<>();
 
         //TODO Add server mehtod
-        if(bundle!=null) {
+        if (bundle != null) {
             if (bundle.containsKey("newButtonObject")) {
-                if(buttonObjects==null)
-                    buttonObjects=new ArrayList<ButtonObject>();
+                if (buttonObjects == null)
+                    buttonObjects = new ArrayList<>();
 
                 ButtonObject newButtonObject = (ButtonObject) bundle.getSerializable("newButtonObject");
                 buttonObjects.add(newButtonObject);
@@ -109,16 +103,15 @@ public class MainActivity extends Activity {
             }
         }
 
-        for(int i=0;i<buttonObjects.size();i++){
+        for (int i = 0; i < buttonObjects.size(); i++) {
             imageButtons[buttonObjects.get(i).getButtonPosition()].setImageResource(buttonObjects.get(i).getImageId());
             imageButtons[buttonObjects.get(i).getButtonPosition()].setTag(buttonObjects.get(i).getButtonPosition());
         }
 
-        mNsdManager = (NsdManager)getSystemService(Context.NSD_SERVICE);
+        mNsdManager = (NsdManager) getSystemService(Context.NSD_SERVICE);
         initializeDiscoveryListener();
         mNsdManager.discoverServices("_http._tcp.", NsdManager.PROTOCOL_DNS_SD, mDiscoveryListener);
     }
-
 
 
     @Override
@@ -144,13 +137,11 @@ public class MainActivity extends Activity {
     }
 
 
-
-
     private final class MyLongTouchListener implements View.OnLongClickListener {
 
         @Override
         public boolean onLongClick(View view) {
-            for (int i=0;i<buttonObjects.size();i++) {
+            for (int i = 0; i < buttonObjects.size(); i++) {
                 if (view.getTag() == buttonObjects.get(i).getButtonPosition())
                     draggedButtonObject = buttonObjects.get(i);
             }
@@ -169,38 +160,38 @@ public class MainActivity extends Activity {
             //TODO call action
 
 
-            ImageButton button = (ImageButton)view;
-              int resourceName =button.getId();
-                    switch (resourceName){
-                        case R.id.imageButton:
-                            LIGHT_COLOR=RED_COLOR;
-                            break;
+            ImageButton button = (ImageButton) view;
+            int resourceName = button.getId();
+            switch (resourceName) {
+                case R.id.imageButton:
+                    LIGHT_COLOR = RED_COLOR;
+                    break;
 
-                        case R.id.imageButton2:
-                            LIGHT_COLOR=ORANGE_COLOR;
-                            break;
+                case R.id.imageButton2:
+                    LIGHT_COLOR = ORANGE_COLOR;
+                    break;
 
-                        case R.id.imageButton3:
-                            LIGHT_COLOR="#B23D2A";
-                            break;
+                case R.id.imageButton3:
+                    LIGHT_COLOR = "#B23D2A";
+                    break;
 
-                        case R.id.imageButton4:
-                            LIGHT_COLOR=BLUE_COLOR;
-                            break;
+                case R.id.imageButton4:
+                    LIGHT_COLOR = BLUE_COLOR;
+                    break;
 
-                        case R.id.imageButton5:
-                            LIGHT_COLOR="#EFC94C";
-                            break;
+                case R.id.imageButton5:
+                    LIGHT_COLOR = "#EFC94C";
+                    break;
 
-                        case R.id.imageButton6:
-                            LIGHT_COLOR="#42B264";
-                            break;
+                case R.id.imageButton6:
+                    LIGHT_COLOR = "#42B264";
+                    break;
 
 
-                        default:
-                            LIGHT_COLOR=ORANGE_COLOR;
-                            break;
-                    }
+                default:
+                    LIGHT_COLOR = ORANGE_COLOR;
+                    break;
+            }
 
 
             socket.emit("setLight", LIGHT_COLOR);
@@ -220,12 +211,12 @@ public class MainActivity extends Activity {
             @Override
             public void onServiceFound(NsdServiceInfo service) {
                 Log.i("service", service.toString());
-                if(service.getServiceName().equals("Smart-Remote-Server")){
-                    if(mNsdManager!=null){
+                if (service.getServiceName().equals("Smart-Remote-Server")) {
+                    if (mNsdManager != null) {
                         mNsdManager.resolveService(service, new NsdManager.ResolveListener() {
                             @Override
                             public void onResolveFailed(NsdServiceInfo serviceInfo, int errorCode) {
-                                Log.i("service not resolved", serviceInfo.toString()+" " + errorCode);
+                                Log.i("service not resolved", serviceInfo.toString() + " " + errorCode);
                             }
 
                             @Override
@@ -247,7 +238,7 @@ public class MainActivity extends Activity {
             public void onServiceLost(NsdServiceInfo service) {
                 // When the network service is no longer available.
                 // Internal bookkeeping code goes here.
-                Log.i("service", "service lost: "+service);
+                Log.i("service", "service lost: " + service);
             }
 
             @Override
@@ -269,9 +260,9 @@ public class MainActivity extends Activity {
         };
     }
 
-    private void setupSocketIO(){
+    private void setupSocketIO() {
         try {
-            Log.i("socket", "http://"+hostIP+":"+port+"/");
+            Log.i("socket", "http://" + hostIP + ":" + port + "/");
             socket = IO.socket("http://" + hostIP + ":" + port + "/");
             socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
 
@@ -292,7 +283,7 @@ public class MainActivity extends Activity {
 
                 @Override
                 public void call(Object... args) {
-                    JSONArray jArray = (JSONArray)args[0];
+                    JSONArray jArray = (JSONArray) args[0];
                 }
             });
 
@@ -313,7 +304,7 @@ public class MainActivity extends Activity {
     }
 
 
-    class MyDragListener implements View.OnDragListener{
+    class MyDragListener implements View.OnDragListener {
 
         @Override
         public boolean onDrag(View v, DragEvent event) {
@@ -329,7 +320,7 @@ public class MainActivity extends Activity {
                     oldButton.setVisibility(View.VISIBLE);
                     ImageButton targetButton = (ImageButton) v;
 
-                    if(oldButton!=targetButton&&targetButton!=null&&draggedButtonObject!=null) {
+                    if (oldButton != targetButton && targetButton != null && draggedButtonObject != null) {
                         oldButton.setImageResource(android.R.color.transparent);
                         targetButton.setImageResource(draggedButtonObject.getImageId());
                         Integer newPos = (Integer) targetButton.getTag();
@@ -339,7 +330,7 @@ public class MainActivity extends Activity {
                 case DragEvent.ACTION_DRAG_ENDED:
                     ImageButton button = (ImageButton) event.getLocalState();
                     button.setVisibility(View.VISIBLE);
-                   break;
+                    break;
 
                 default:
                     break;
@@ -348,7 +339,7 @@ public class MainActivity extends Activity {
         }
 
 
-}
+    }
 
 
 }

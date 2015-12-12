@@ -1,17 +1,12 @@
 package de.ramelsberger.lmu.smartremoteapp;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -25,8 +20,6 @@ public class DetailsView extends Activity {
     private DetailsView thisActivity;
     private Spinner iconSpinner;
     private Spinner buttonPositionSpinner;
-    private EditText editTextActionText;
-    private EditText editTextButtonText;
     private TextView iconView;
 
     private int[] productImages = {R.drawable.coffee_icon, R.drawable.light_icon, R.drawable.music_icon, R.drawable.standlight_blue, R.drawable.standlight_green, R.drawable.standlight_turkies, R.drawable.standlight_turkies, R.drawable.standlight_red};
@@ -37,6 +30,8 @@ public class DetailsView extends Activity {
     private Spinner deviceSpinner;
     private Spinner deviceActionSpinner;
 
+    private String[] deviceString;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,8 +40,17 @@ public class DetailsView extends Activity {
         thisActivity = this;
         iconArray = getResources().getStringArray(R.array.icon_array);
 
-        final Button button = (Button) findViewById(R.id.accept_button);
-        button.setOnClickListener(new View.OnClickListener() {
+
+        final Button backButton = (Button) findViewById(R.id.detailsBackButton);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent1 = new Intent(thisActivity, ButtonChooser.class);
+                startActivity(intent1);
+            }
+        });
+
+        final Button acceptButton = (Button) findViewById(R.id.accept_button);
+        acceptButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 ButtonObject buttonObject = new ButtonObject(currentProductImage, selectedPosition, "TODO", "TODO");
 
@@ -70,7 +74,7 @@ public class DetailsView extends Activity {
 
         iconSpinner = (Spinner) thisActivity.findViewById(R.id.spinner);
 
-        ArrayAdapter adapter = new SpinnerAdapter(this, R.layout.simple_image_spinner_layout,iconArray,productImages);
+        ArrayAdapter adapter = new SpinnerAdapter(this, R.layout.simple_image_spinner_layout, iconArray, productImages);
         iconSpinner.setAdapter(adapter);
         //iconSpinner.setAdapter(new MyAdapter(this, R.layout.simple_spinner_layout, iconArray));
 
@@ -89,8 +93,8 @@ public class DetailsView extends Activity {
         });
 
         buttonPositionSpinner = (Spinner) thisActivity.findViewById(R.id.positionSpinner);
-        String[] positions =  {"Position 1","Position 2","Position 3","Position 4","Position 5","Position 6"};
-        ArrayAdapter textAdapter = new ArrayAdapter(this, R.layout.simple_spinner_layout,positions);
+        String[] positions = {"Position 1", "Position 2", "Position 3", "Position 4", "Position 5", "Position 6"};
+        ArrayAdapter textAdapter = new ArrayAdapter(this, R.layout.simple_spinner_layout, positions);
         buttonPositionSpinner.setAdapter(textAdapter);
         buttonPositionSpinner.setSelection(lastAddedPosition);
         buttonPositionSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -106,13 +110,25 @@ public class DetailsView extends Activity {
 
         });
 
+        //Add variables from the button chooser
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            deviceString = extras.getStringArray("TestString");
+        }
+        int deviceNumber = extras.getInt("deviceNumber");
+        int actionNumber = extras.getInt("actionNumber");
+
+        ArrayAdapter deviceTextAdapter = new ArrayAdapter(this, R.layout.simple_spinner_layout, deviceString);
+
         deviceSpinner = (Spinner) thisActivity.findViewById(R.id.deviceSpinner);
-        deviceSpinner.setAdapter(textAdapter);
+        deviceSpinner.setAdapter(deviceTextAdapter);
+        deviceSpinner.setSelection(deviceNumber);
+
         deviceActionSpinner = (Spinner) thisActivity.findViewById(R.id.deviceActionSpinner);
         deviceActionSpinner.setAdapter(textAdapter);
+        deviceActionSpinner.setSelection(actionNumber);
 
     }
-
 
 
 }
