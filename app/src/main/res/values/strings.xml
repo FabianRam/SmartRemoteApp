@@ -6,7 +6,10 @@
     <string name="edit_text_name" >Button name</string>
     <string name="edit_text_actoin_name" >Action name</string>
     <string name="positionTextView">Position:</string>
-    <string name="NameOfButton">Name of the Button</string>
+    <string name="NameOfButton">From Device</string>
 
+    <string name="typeface_josfinSans">fonts/JosefinSans-Regular.ttf</string>
 
+    <!-- font awome Icons !-->
+    <string name="icon_heart">[&#xf004;]</string>
 </resources>

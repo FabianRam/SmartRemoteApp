@@ -3,9 +3,10 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">@color/darkBlue</item>
+        <item name="colorPrimaryDark">@color/darkBlue</item>
+        <item name="colorAccent">@color/cherryRed</item>
+
     </style>
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
@@ -13,5 +14,46 @@
     </style>
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <!--- change spinner item!-->
+    <style name="SpinnerTheme" parent="android:Widget.Spinner">
+        <item name="android:background">@color/cherryRed</item>
+        <item name="android:dropDownSelector">@drawable/not_chosen_bubble</item>
+    </style>
+
+    <style name="SpinnerTheme.DropDown">
+        <item name="android:spinnerMode">dropdown</item>
+    </style>
+
+    <!-- Changes the spinner drop down item radio button style -->
+    <style name="DropDownItemSpinnerTheme" parent="android:Widget.DropDownItem.Spinner">
+        <item name="android:checkMark">@drawable/not_chosen_bubble</item>
+    </style>
+
+    <style name="ListViewSpinnerTheme" parent="android:Widget.ListView">
+        <item name="android:listSelector">@drawable/choosen_page_bubble</item>
+    </style>
+
+    <style name="ListViewSpinnerTheme.White" parent="android:Widget.ListView.White">
+        <item name="android:listSelector">@drawable/not_chosen_bubble</item>
+    </style>
+
+    <style name="SpinnerItemTheme"
+        parent="android:TextAppearance.Widget.TextView.SpinnerItem">
+        <item name="android:textColor">#000000</item>
+    </style>
+
+    <!---switch style -->
+    <style name="ColorSwitchStyle">
+        <item name="colorControlActivated">@color/cherryRed</item>
+        <!-- Inactive thumb color -->
+        <item name="colorSwitchThumbNormal">@color/brighterBlue</item>
+        <!-- Inactive track color(30% transparency) -->
+        <item name="android:colorForeground">@color/orange</item>
+
+        <item name="colorControlNormal">@color/brighterBlue</item>
+        <item name="colorButtonNormal">@color/orange</item>
+    </style>
+
 
 </resources>

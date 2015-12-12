@@ -1,8 +1,10 @@
 package de.ramelsberger.lmu.smartremoteapp;
 
+import android.app.Activity;
 import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.net.nsd.NsdManager;
 import android.net.nsd.NsdServiceInfo;
 import android.os.Bundle;
@@ -15,10 +17,12 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.ImageButton;
 
 import org.json.JSONArray;
 
+import java.lang.reflect.Type;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 
@@ -26,7 +30,7 @@ import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 
-public class MainActivity extends AppCompatActivity  {
+public class MainActivity extends Activity {
 
     public static final String BLUE_COLOR = "#334D5C";
     public static final String ORANGE_COLOR = "#E27A3F";
@@ -51,18 +55,26 @@ public class MainActivity extends AppCompatActivity  {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        //--------------------- setup costum font
+
+
+
+        //---------------------
+
+        //TODO
+       // Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        //setSupportActionBar(toolbar);
         thisActivity =this;
         imageButtons =
                 new ImageButton[]{
-                        (ImageButton) this.thisActivity.findViewById(R.id.imageButton),
-                        (ImageButton) this.thisActivity.findViewById(R.id.imageButton2),
-                        (ImageButton) this.thisActivity.findViewById(R.id.imageButton3),
-                        (ImageButton) this.thisActivity.findViewById(R.id.imageButton4),
-                        (ImageButton) this.thisActivity.findViewById(R.id.imageButton5),
-                        (ImageButton) this.thisActivity.findViewById(R.id.imageButton6)};
+                        (ImageButton) this.findViewById(R.id.imageButton),
+                        (ImageButton) this.findViewById(R.id.imageButton2),
+                        (ImageButton) this.findViewById(R.id.imageButton3),
+                        (ImageButton) this.findViewById(R.id.imageButton4),
+                        (ImageButton) this.findViewById(R.id.imageButton5),
+                        (ImageButton) this.findViewById(R.id.imageButton6)};
 
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -96,7 +108,7 @@ public class MainActivity extends AppCompatActivity  {
 
             }
         }
-        
+
         for(int i=0;i<buttonObjects.size();i++){
             imageButtons[buttonObjects.get(i).getButtonPosition()].setImageResource(buttonObjects.get(i).getImageId());
             imageButtons[buttonObjects.get(i).getButtonPosition()].setTag(buttonObjects.get(i).getButtonPosition());
@@ -106,6 +118,8 @@ public class MainActivity extends AppCompatActivity  {
         initializeDiscoveryListener();
         mNsdManager.discoverServices("_http._tcp.", NsdManager.PROTOCOL_DNS_SD, mDiscoveryListener);
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -129,6 +143,9 @@ public class MainActivity extends AppCompatActivity  {
         return super.onOptionsItemSelected(item);
     }
 
+
+
+
     private final class MyLongTouchListener implements View.OnLongClickListener {
 
         @Override
@@ -150,25 +167,41 @@ public class MainActivity extends AppCompatActivity  {
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
             //TODO call action
-            for (int i=0;i<buttonObjects.size();i++) {
-                if (view.getTag() == buttonObjects.get(i).getButtonPosition())
-                {
-                    switch (buttonObjects.get(i).getButtonPosition()){
-                        case 1:
+
+
+            ImageButton button = (ImageButton)view;
+              int resourceName =button.getId();
+                    switch (resourceName){
+                        case R.id.imageButton:
                             LIGHT_COLOR=RED_COLOR;
                             break;
 
-                        case 2:
+                        case R.id.imageButton2:
+                            LIGHT_COLOR=ORANGE_COLOR;
+                            break;
+
+                        case R.id.imageButton3:
+                            LIGHT_COLOR="#B23D2A";
+                            break;
+
+                        case R.id.imageButton4:
                             LIGHT_COLOR=BLUE_COLOR;
                             break;
+
+                        case R.id.imageButton5:
+                            LIGHT_COLOR="#EFC94C";
+                            break;
+
+                        case R.id.imageButton6:
+                            LIGHT_COLOR="#42B264";
+                            break;
+
 
                         default:
                             LIGHT_COLOR=ORANGE_COLOR;
                             break;
                     }
-                    break;
-                }
-            }
+
 
             socket.emit("setLight", LIGHT_COLOR);
             return false;

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/spinneritem_txt"
+        android:layout_width="280dp"
+        android:layout_height="50dp"
+        android:text="Hello i am android logo"
+        android:textSize="20dp"
+        android:textColor="@color/white"
+    android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+
+        android:textAlignment="center"
+        android:layout_gravity="left"
+    android:gravity="center_vertical|center_horizontal" />
+
+
+
