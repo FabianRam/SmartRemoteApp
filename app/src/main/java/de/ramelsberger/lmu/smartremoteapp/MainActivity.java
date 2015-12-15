@@ -8,6 +8,13 @@ import android.net.nsd.NsdManager;
 import android.net.nsd.NsdServiceInfo;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.DragEvent;
 import android.view.Menu;
@@ -20,12 +27,14 @@ import org.json.JSONArray;
 
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.List;
 
 import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 
-public class MainActivity extends Activity {
+
+public class MainActivity extends AppCompatActivity {
 
     public static final String BLUE_COLOR = "#334D5C";
     public static final String ORANGE_COLOR = "#E27A3F";
@@ -47,6 +56,11 @@ public class MainActivity extends Activity {
     private String hostIP = "";
     private int port = 0;
 
+    private Toolbar toolbar;
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,21 +68,18 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         //--------------------- setup costum font
 
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
 
+
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        setupViewPager(viewPager);
+
+        tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(viewPager);
+
+
+        thisActivity=this;
         //---------------------
-
-        //TODO
-        // Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        //setSupportActionBar(toolbar);
-        thisActivity = this;
-        imageButtons =
-                new ImageButton[]{
-                        (ImageButton) this.findViewById(R.id.imageButton),
-                        (ImageButton) this.findViewById(R.id.imageButton2),
-                        (ImageButton) this.findViewById(R.id.imageButton3),
-                        (ImageButton) this.findViewById(R.id.imageButton4),
-                        (ImageButton) this.findViewById(R.id.imageButton5),
-                        (ImageButton) this.findViewById(R.id.imageButton6)};
 
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -80,33 +91,6 @@ public class MainActivity extends Activity {
             }
         });
 
-
-        for (int i = 0; i < imageButtons.length; i++) {
-            imageButtons[i].setTag(i);
-        }
-
-        Bundle bundle = getIntent().getExtras();
-
-        //Get saved buttonObject from DetailsView
-        if (buttonObjects == null)
-            buttonObjects = new ArrayList<>();
-
-        //TODO Add server mehtod
-        if (bundle != null) {
-            if (bundle.containsKey("newButtonObject")) {
-                if (buttonObjects == null)
-                    buttonObjects = new ArrayList<>();
-
-                ButtonObject newButtonObject = (ButtonObject) bundle.getSerializable("newButtonObject");
-                buttonObjects.add(newButtonObject);
-
-            }
-        }
-
-        for (int i = 0; i < buttonObjects.size(); i++) {
-            imageButtons[buttonObjects.get(i).getButtonPosition()].setImageResource(buttonObjects.get(i).getImageId());
-            imageButtons[buttonObjects.get(i).getButtonPosition()].setTag(buttonObjects.get(i).getButtonPosition());
-        }
 
         mNsdManager = (NsdManager) getSystemService(Context.NSD_SERVICE);
         initializeDiscoveryListener();
@@ -342,4 +326,41 @@ public class MainActivity extends Activity {
     }
 
 
+    private void setupViewPager(ViewPager viewPager) {
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        adapter.addFrag(new OneFragment(), "ONE");
+        adapter.addFrag(new OneFragment(), "TWO");
+        adapter.addFrag(new OneFragment(), "THREE");
+        adapter.addFrag(new OneFragment(), "FOUR");
+           viewPager.setAdapter(adapter);
+    }
+
+class ViewPagerAdapter extends FragmentPagerAdapter {
+    private final List<Fragment> mFragmentList = new ArrayList<>();
+    private final List<String> mFragmentTitleList = new ArrayList<>();
+
+    public ViewPagerAdapter(FragmentManager manager) {
+        super(manager);
+    }
+
+    @Override
+    public Fragment getItem(int position) {
+        return mFragmentList.get(position);
+    }
+
+    @Override
+    public int getCount() {
+        return mFragmentList.size();
+    }
+
+    public void addFrag(Fragment fragment, String title) {
+        mFragmentList.add(fragment);
+        mFragmentTitleList.add(title);
+    }
+
+    @Override
+    public CharSequence getPageTitle(int position) {
+        return mFragmentTitleList.get(position);
+    }
+}
 }

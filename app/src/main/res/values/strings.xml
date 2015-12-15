@@ -11,5 +11,38 @@
     <string name="typeface_josfinSans">fonts/JosefinSans-Regular.ttf</string>
 
     <!-- font awome Icons !-->
-    <string name="icon_heart">[&#xf004;]</string>
+    <string name="font_awesome_android_icon">&#xf17b;</string>
+    <string name="font_awesome_area_chart_icon">&#xf1fe;</string>
+    <string name="font_awesome_cubes_icon">&#xf1b3;</string>
+    <string name="font_awesome_mobile_phone_icon">&#xf10b;</string>
+
+    <!-- stereoanlage !-->
+
+    <string name="font_awesome_backward">&#xf04a;</string>
+    <string name="font_awesome_fa_fast_forward">&#xf050;</string>
+    <string name="font_awesome_fa_forward">&#xf04e;</string>
+    <string name="font_awesome_fa_music">&#xf001;</string>
+    <string name="font_awesome_fa_pause_circle">&#xf28b;</string>
+    <string name="font_awesome_fa_repeat">&#xf01e;</string>
+
+    <!-- lights !-->
+
+    <string name="font_awesome_fa_sort_asc">&#xf0de;</string>
+    <string name="font_awesome_fa_sort_down">&#xf0dd;</string>
+    <string name="font_awesome_fa_adjust">&#xf042;</string>
+    <string name="font_awesome_fa_circle">&#xf111;</string>
+    <string name="font_awesome_fa_circle_o">&#xf10c;</string>
+
+    <!-- lights !-->
+    <string name="font_awesome_fa_coffee">&#xf0f4;</string>
+
+
+
+    <!-- widget attributes !-->
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="configure">Configure</string>
+    <string name="add_widget">Add widget</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

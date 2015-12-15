@@ -1,136 +1,34 @@
-<?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:showIn="@layout/activity_main" tools:context=".MainActivity"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="@color/white">
 
-    <TableLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:weightSum="3">
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="fill_parent"
-            android:layout_height="150dp"
-            android:weightSum="2"
-            android:layout_margin="0dp"
-            android:gravity="center_horizontal"
-            android:layout_marginBottom="5dp">
-            <ImageButton
-                android:layout_width="140dp"
-                android:layout_height="140dp"
-                android:id="@+id/imageButton"
-                android:scaleType="fitCenter"
-                android:background="@drawable/roundcorner"
-                android:padding="5dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginRight="15dp"
-                android:layout_marginBottom="5dp" />
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
-            <ImageButton
-                android:layout_width="140dp"
-                android:layout_height="140dp"
-                android:id="@+id/imageButton2"
-                android:scaleType="fitCenter"
-                android:background="@drawable/roundcorner"
-                android:padding="5dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginLeft="15dp"
-                android:layout_marginBottom="5dp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="fill_parent"
-            android:layout_height="150dp"
-            android:weightSum="2"
-            android:gravity="center_horizontal"
-            android:layout_marginTop="10dp">
-            <ImageButton
-                android:layout_width="140dp"
-                android:layout_height="140dp"
-                android:id="@+id/imageButton3"
-                android:scaleType="fitCenter"
-                android:background="@drawable/roundcorner"
-                android:padding="5dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="5dp"
-                android:layout_marginRight="15dp" />
-            <ImageButton
-                android:layout_width="140dp"
-                android:layout_height="140dp"
-                android:id="@+id/imageButton4"
-                android:scaleType="fitCenter"
-                android:background="@drawable/roundcorner"
-                android:padding="5dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="5dp"
-                android:layout_marginLeft="15dp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="fill_parent"
-            android:layout_height="150dp"
-            android:weightSum="2"
-            android:gravity="center_horizontal"
-            android:layout_marginTop="10dp">
-            <ImageButton
-                android:layout_width="140dp"
-                android:layout_height="140dp"
-                android:id="@+id/imageButton5"
-                android:scaleType="fitCenter"
-                android:background="@drawable/roundcorner"
-                android:padding="5dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginRight="15dp"
-                android:layout_marginBottom="5dp" />
-
-            <ImageButton
-                android:layout_width="140dp"
-                android:layout_height="140dp"
-                android:id="@+id/imageButton6"
-                android:scaleType="fitCenter"
-                android:background="@drawable/roundcorner"
-                android:padding="5dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="5dp"
-                android:layout_marginLeft="15dp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="horizontal"
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tabs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:gravity="center_horizontal"
-            android:layout_weight="1">
+            app:tabMode="fixed"
+            app:tabGravity="fill"/>
+    </android.support.design.widget.AppBarLayout>
 
-            <ImageButton
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:id="@+id/imageButton53"
-                android:src="@drawable/not_chosen_bubble"
-                android:background="#00ffffff"
-                android:scaleType="fitCenter"/>
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"  />
 
-            <ImageButton
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:id="@+id/imageButton54"
-                android:src="@drawable/choosen_page_bubble"
-                android:background="#00ffffff"
-                android:layout_margin="5dp"
-                android:scaleType="fitCenter"/>
-        </LinearLayout>
-
-    </TableLayout>
-
-</RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>

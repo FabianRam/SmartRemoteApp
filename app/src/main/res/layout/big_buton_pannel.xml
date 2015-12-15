@@ -1,58 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-android:layout_width="fill_parent"
-android:layout_height="wrap_content"
-android:id="@+id/big_button_panel"
-    android:orientation="vertical"
-    android:gravity="center">
-
-<TextView
-    android:layout_width="wrap_content"
+    android:id="@+id/big_button_panel"
+    android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:textAppearance="?android:attr/textAppearanceLarge"
-    android:text="Large Text"
-    android:id="@+id/textView3"
-    android:layout_alignParentBottom="true"
-    android:layout_alignParentLeft="true"
-    android:layout_alignParentStart="true"
-    android:background="@color/cherryRed"
-    android:paddingTop="5dp"
-    android:paddingBottom="5dp"
-    android:paddingRight="20dp"
-    android:paddingLeft="5dp"
-    android:textColor="#ffffff"
-    android:textStyle="normal"
-    android:minWidth="100dp"
     android:gravity="center"
-    android:textAlignment="center"
-    android:textSize="20dp"
-    android:layout_marginTop="20dp"
-    android:layout_marginBottom="5dp" />
+    android:orientation="vertical">
 
-<HorizontalScrollView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:id="@+id/horizontalScrollView2"
-    android:layout_marginBottom="10dp"
-    android:layout_marginTop="5dp"
-    android:fillViewport="false"
-    android:paddingTop="5dp"
-    android:paddingBottom="5dp"
-    android:paddingRight="2dp"
-    android:paddingLeft="2dp"
-    android:background="@drawable/bluecardbackground"
-    >
-    <LinearLayout
-        android:id="@+id/linearLayoutDrawer"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="5dp"
-        >
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="20dp"
+        android:background="@color/cherryRed"
+        android:gravity="center"
+        android:minWidth="100dp"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp"
+        android:text="Large Text"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="#ffffff"
+        android:textStyle="normal" />
+
+    <HorizontalScrollView
+        android:id="@+id/horizontalScrollView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/bluecardbackground"
+        android:fillViewport="false"
+        android:paddingBottom="5dp"
+        android:paddingLeft="2dp"
+        android:paddingRight="2dp"
+        android:paddingTop="5dp">
+
+        <LinearLayout
+            android:id="@+id/linearLayoutDrawer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:padding="5dp">
 
 
-
-
-    </LinearLayout>
-</HorizontalScrollView>
+        </LinearLayout>
+    </HorizontalScrollView>
 </LinearLayout>

@@ -2,6 +2,7 @@ package de.ramelsberger.lmu.smartremoteapp;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -52,7 +53,7 @@ public class DetailsView extends Activity {
         final Button acceptButton = (Button) findViewById(R.id.accept_button);
         acceptButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                ButtonObject buttonObject = new ButtonObject(currentProductImage, selectedPosition, "TODO", "TODO");
+                ButtonObject buttonObject = new ButtonObject(currentProductImage, selectedPosition, iconView.getText().toString(), "TODO");
 
                 Intent intent1 = new Intent(thisActivity, MainActivity.class);
                 Bundle b = new Bundle();
@@ -117,6 +118,7 @@ public class DetailsView extends Activity {
         }
         int deviceNumber = extras.getInt("deviceNumber");
         int actionNumber = extras.getInt("actionNumber");
+        String iconString =extras.getString("IconString");
 
         ArrayAdapter deviceTextAdapter = new ArrayAdapter(this, R.layout.simple_spinner_layout, deviceString);
 
@@ -128,6 +130,9 @@ public class DetailsView extends Activity {
         deviceActionSpinner.setAdapter(textAdapter);
         deviceActionSpinner.setSelection(actionNumber);
 
+        Typeface fontAwesomeFont = Typeface.createFromAsset(getAssets(), "fontawesome-webfont.ttf");
+        iconView.setTypeface(fontAwesomeFont);
+        iconView.setText(iconString);
     }
 
 

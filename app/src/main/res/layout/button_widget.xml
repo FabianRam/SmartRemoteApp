@@ -1,0 +1,99 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:padding="@dimen/widget_margin">
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center|center_horizontal">
+
+            <Button
+                android:id="@+id/widgetButton1"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/roundcorner"
+
+                android:scaleType="fitCenter"
+                android:text="New Button" />
+
+            <Button
+                android:id="@+id/widgetButton2"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/roundcorner"
+                android:scaleType="fitCenter"
+                android:text="New Button" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center|center_horizontal">
+
+            <Button
+                android:id="@+id/widgetButton3"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/roundcorner"
+
+                android:scaleType="fitCenter"
+                android:text="New Button" />
+
+            <Button
+                android:id="@+id/widgetButton4"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/roundcorner"
+                android:scaleType="fitCenter"
+                android:text="New Button" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center|center_horizontal">
+
+            <Button
+                android:id="@+id/widgetButton5"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/roundcorner"
+
+                android:scaleType="fitCenter"
+                android:text="New Button" />
+
+            <Button
+                android:id="@+id/widgetButton6"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/roundcorner"
+                android:scaleType="fitCenter"
+                android:text="New Button" />
+        </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>
