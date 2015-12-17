@@ -11,12 +11,14 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 /**
  * Created by Fabian on 13.11.2015.
  */
 public class DetailsView extends Activity {
 
-    private static int lastAddedPosition = 0;
+    public static int lastAddedPosition = 0;
 
     private DetailsView thisActivity;
     private Spinner iconSpinner;
@@ -32,6 +34,7 @@ public class DetailsView extends Activity {
     private Spinner deviceActionSpinner;
 
     private String[] deviceString;
+    public static int maxPos=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,15 +57,30 @@ public class DetailsView extends Activity {
         acceptButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 ButtonObject buttonObject = new ButtonObject(currentProductImage, selectedPosition, iconView.getText().toString(), "TODO");
-
                 Intent intent1 = new Intent(thisActivity, MainActivity.class);
-                Bundle b = new Bundle();
+                Bundle b;
+                if(intent1.getExtras()!=null) {
+                    b = intent1.getExtras();
+                }else
+                {
+                    b= new Bundle();
+                }
+
                 b.putSerializable("newButtonObject", buttonObject);
+                int highestPosition=buttonObject.getButtonPosition();
+                if(highestPosition<maxPos)
+                {
+                    maxPos=highestPosition;
+                    //highestPosition=b.getInt("highestPosition");
+                }else{
+
+                }
+
                 intent1.putExtras(b);
-                if (lastAddedPosition < 5)//sets the button on the next space
-                    lastAddedPosition++;
-                else
-                    lastAddedPosition = 0;
+                //if (lastAddedPosition < 5)//sets the button on the next space
+                lastAddedPosition++;
+                //else
+                 //   lastAddedPosition = 0;
                 startActivity(intent1);
 
             }
@@ -94,9 +112,25 @@ public class DetailsView extends Activity {
         });
 
         buttonPositionSpinner = (Spinner) thisActivity.findViewById(R.id.positionSpinner);
-        String[] positions = {"Position 1", "Position 2", "Position 3", "Position 4", "Position 5", "Position 6"};
+
+
+
+        ArrayList<String> positions=new ArrayList<String>();
+        int multiply=1;
+
+        for (int i=0;i<lastAddedPosition;i++)
+        {
+            if(i+1==6){
+                multiply++;
+            }
+        }
+        for (int i =0;i<multiply*6;i++){
+            positions.add("Position "+i);
+        }
+
         ArrayAdapter textAdapter = new ArrayAdapter(this, R.layout.simple_spinner_layout, positions);
         buttonPositionSpinner.setAdapter(textAdapter);
+        if(buttonPositionSpinner.getChildCount()<=lastAddedPosition-1)
         buttonPositionSpinner.setSelection(lastAddedPosition);
         buttonPositionSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override

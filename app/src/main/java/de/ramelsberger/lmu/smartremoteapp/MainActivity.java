@@ -67,20 +67,17 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
         //--------------------- setup costum font
+        TypefaceUtil.overrideFont(getApplicationContext(), "SERIF", "JosefinSans-Regular.ttf");
+
+        //--------------------- toolbar
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-
-
+        thisActivity=this;
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         setupViewPager(viewPager);
-
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
-
-
-        thisActivity=this;
         //---------------------
-
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -327,11 +324,23 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void setupViewPager(ViewPager viewPager) {
+        Bundle bundle = getIntent().getExtras();
+        int highestNumber=0;
+
+
+        int amountOfPages=DetailsView.lastAddedPosition/6+1;
+
+
+
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFrag(new OneFragment(), "ONE");
-        adapter.addFrag(new OneFragment(), "TWO");
-        adapter.addFrag(new OneFragment(), "THREE");
-        adapter.addFrag(new OneFragment(), "FOUR");
+        for (int i =0;i<amountOfPages;i++) {
+            if(DetailsView.maxPos%6==0) {
+                OneFragment oneFragment = new OneFragment();
+                oneFragment.setFragmentId(i);
+                adapter.addFrag(oneFragment, "Page " + i);
+            }
+        }
+
            viewPager.setAdapter(adapter);
     }
 

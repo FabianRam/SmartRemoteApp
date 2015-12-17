@@ -37,10 +37,8 @@ public class OneFragment extends Fragment {
     private NsdManager mNsdManager;
     private NsdManager.DiscoveryListener mDiscoveryListener;
 
-    private Socket socket;
+    private int fragmentId;
 
-    private String hostIP = "";
-    private int port = 0;
 
 
     public OneFragment() {
@@ -50,12 +48,6 @@ public class OneFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
-
-
-
-
     }
 
     @Override
@@ -79,7 +71,7 @@ public class OneFragment extends Fragment {
                         (TextView) thisFragment.findViewById(R.id.imageButton6)};
 
         for (int i = 0; i < imageButtons.length; i++) {
-            imageButtons[i].setTag(i);
+            imageButtons[i].setTag(i+6*fragmentId);
         }
 
         Bundle bundle = thisActivity.getIntent().getExtras();
@@ -101,13 +93,28 @@ public class OneFragment extends Fragment {
         }
 
         Typeface fontAwesomeFont = Typeface.createFromAsset(thisActivity.getAssets(), "fontawesome-webfont.ttf");
-        for (int i = 0; i < buttonObjects.size(); i++) {
-            imageButtons[buttonObjects.get(i).getButtonPosition()].setTypeface(fontAwesomeFont);
-            imageButtons[buttonObjects.get(i).getButtonPosition()].setText(buttonObjects.get(i).getButtonText());
-            imageButtons[buttonObjects.get(i).getButtonPosition()].setTag(buttonObjects.get(i).getButtonPosition());
+        int minus=0;
+        if(fragmentId>0)
+            minus=1;
+        for (int i = fragmentId*6+minus; i < (fragmentId+1)*6; i++) {
+           if(i%6<buttonObjects.size())
+            {
+                if(buttonObjects.size()>i){
+                int index=(buttonObjects.get(i).getButtonPosition()) % 6;
+                if(imageButtons[index]!=null) {
+                    imageButtons[index].setTypeface(fontAwesomeFont);
+                    imageButtons[index].setText(buttonObjects.get(i).getButtonText());
+                    imageButtons[index].setTag(buttonObjects.get(i).getButtonPosition());
+                }
+                }
+            }
         }
 
         return thisFragment;
+    }
+
+    public void setFragmentId(int id){
+        fragmentId=id;
     }
 }
 
