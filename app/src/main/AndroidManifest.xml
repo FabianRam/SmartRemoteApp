@@ -40,6 +40,11 @@
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
         </activity>
+
+        <service
+            android:name=".SocketIOService"
+            android:enabled="false"
+            android:exported="false"></service>
     </application>
 
 </manifest>

@@ -2,11 +2,14 @@ package de.ramelsberger.lmu.smartremoteapp;
 
 import android.app.Activity;
 import android.content.ClipData;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.net.nsd.NsdManager;
 import android.net.nsd.NsdServiceInfo;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -48,13 +51,8 @@ public class MainActivity extends AppCompatActivity {
     private ButtonObject draggedButtonObject;
     ImageButton[] imageButtons;
 
-    private NsdManager mNsdManager;
-    private NsdManager.DiscoveryListener mDiscoveryListener;
-
-    private Socket socket;
-
-    private String hostIP = "";
-    private int port = 0;
+    private SocketIOService mService;
+    private boolean mBound;
 
     private Toolbar toolbar;
     private TabLayout tabLayout;
@@ -88,10 +86,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-        mNsdManager = (NsdManager) getSystemService(Context.NSD_SERVICE);
-        initializeDiscoveryListener();
-        mNsdManager.discoverServices("_http._tcp.", NsdManager.PROTOCOL_DNS_SD, mDiscoveryListener);
+        Intent intent = new Intent(this, SocketIOService.class);
+        startService(intent);
+        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
     }
 
 
@@ -117,6 +114,14 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mBound) {
+            unbindService(mConnection);
+            mBound = false;
+        }
+    }
 
     private final class MyLongTouchListener implements View.OnLongClickListener {
 
@@ -175,102 +180,8 @@ public class MainActivity extends AppCompatActivity {
             }
 
 
-            socket.emit("setLight", LIGHT_COLOR);
+            mService.send("setLight", LIGHT_COLOR);
             return false;
-        }
-    }
-
-    public void initializeDiscoveryListener() {
-        mDiscoveryListener = new NsdManager.DiscoveryListener() {
-
-            //  Called as soon as service discovery begins.
-            @Override
-            public void onDiscoveryStarted(String regType) {
-                Log.i("service", "discovery started");
-            }
-
-            @Override
-            public void onServiceFound(NsdServiceInfo service) {
-                Log.i("service", service.toString());
-                if (service.getServiceName().equals("Smart-Remote-Server")) {
-                    if (mNsdManager != null) {
-                        mNsdManager.resolveService(service, new NsdManager.ResolveListener() {
-                            @Override
-                            public void onResolveFailed(NsdServiceInfo serviceInfo, int errorCode) {
-                                Log.i("service not resolved", serviceInfo.toString() + " " + errorCode);
-                            }
-
-                            @Override
-                            public void onServiceResolved(NsdServiceInfo serviceInfo) {
-                                hostIP = serviceInfo.getHost().getHostAddress();
-                                port = serviceInfo.getPort();
-                                setupSocketIO();
-                                mNsdManager.stopServiceDiscovery(mDiscoveryListener);
-                                Log.i("service resolved", "Resolve Succeeded. " + serviceInfo);
-
-
-                            }
-                        });
-                    }
-                }
-            }
-
-            @Override
-            public void onServiceLost(NsdServiceInfo service) {
-                // When the network service is no longer available.
-                // Internal bookkeeping code goes here.
-                Log.i("service", "service lost: " + service);
-            }
-
-            @Override
-            public void onDiscoveryStopped(String serviceType) {
-                Log.i("service", "discovery stopped");
-            }
-
-            @Override
-            public void onStartDiscoveryFailed(String serviceType, int errorCode) {
-                Log.i("service", "discovery start failed");
-                mNsdManager.stopServiceDiscovery(this);
-            }
-
-            @Override
-            public void onStopDiscoveryFailed(String serviceType, int errorCode) {
-                Log.i("service", "discovery stop failed");
-                mNsdManager.stopServiceDiscovery(this);
-            }
-        };
-    }
-
-    private void setupSocketIO() {
-        try {
-            Log.i("socket", "http://" + hostIP + ":" + port + "/");
-            socket = IO.socket("http://" + hostIP + ":" + port + "/");
-            socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
-
-                @Override
-                public void call(Object... args) {
-                    Log.i("INFO", "connected");
-                    //StartListener
-                    onInitializeButtonListeners();
-                }
-            }).on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
-
-                @Override
-                public void call(Object... args) {
-                }
-
-            });
-            socket.on("devices", new Emitter.Listener() {
-
-                @Override
-                public void call(Object... args) {
-                    JSONArray jArray = (JSONArray) args[0];
-                }
-            });
-
-            socket.connect();
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
         }
     }
 
@@ -372,4 +283,36 @@ class ViewPagerAdapter extends FragmentPagerAdapter {
         return mFragmentTitleList.get(position);
     }
 }
+
+    private ServiceConnection mConnection = new ServiceConnection() {
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            mBound = false;
+        }
+
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            // We've bound to LocalService, cast the IBinder and get LocalService instance
+            SocketIOService.SocketIOBinder binder = (SocketIOService.SocketIOBinder) service;
+            mService = binder.getService();
+            binder.setListener(new SocketIOService.SocketIOListener() {
+                @Override
+                public void onConnected() {
+                    onInitializeButtonListeners();
+                }
+
+                @Override
+                public void onDevicesReceived(JSONArray jsonArray) {
+
+                }
+
+                @Override
+                public void onActionsReceived(JSONArray jsonArray) {
+
+                }
+            });
+            mBound = true;
+        }
+    };
 }
