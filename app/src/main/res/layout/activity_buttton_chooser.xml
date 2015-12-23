@@ -28,13 +28,13 @@
         android:layout_alignParentTop="false"
         android:layout_alignParentLeft="false"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="60dp">
+        android:layout_marginTop="55dp">
 
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_marginBottom="10dp">
+            android:layout_height="55dp"
+            android:layout_marginBottom="0dp">
 
             <Button
                 android:layout_width="wrap_content"
@@ -55,12 +55,20 @@
                 android:textColor="@color/white" />
         </LinearLayout>
 
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="40dp"
+            android:id="@+id/top_shaddow"
+            android:background="@drawable/img_shaddow"
+            android:alpha=".7" />
+
         <ScrollView
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:id="@+id/scrollView"
             android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true" >
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="-40dp">
 
             <LinearLayout
                 android:orientation="horizontal"
@@ -94,6 +102,7 @@
 
             </LinearLayout>
         </ScrollView>
+
     </LinearLayout>
 
 </FrameLayout>

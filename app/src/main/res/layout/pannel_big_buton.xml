@@ -12,21 +12,20 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="5dp"
         android:layout_marginTop="20dp"
-        android:background="@color/cherryRed"
         android:gravity="center"
         android:minWidth="100dp"
         android:paddingBottom="5dp"
         android:paddingTop="5dp"
         android:text="Large Text"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="#ffffff"
-        android:textStyle="normal" />
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:background="@color/darkBlue" />
 
     <HorizontalScrollView
         android:id="@+id/horizontalScrollView2"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
         android:layout_marginTop="5dp"
         android:background="@drawable/bluecardbackground"
         android:fillViewport="false"
@@ -44,6 +43,18 @@
 
 
         </LinearLayout>
+
+
     </HorizontalScrollView>
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/imageView"
+        android:layout_marginTop="-6dp"
+        android:layout_marginRight="-5dp"
+        android:layout_marginLeft="-5dp"
+        android:alpha=".7"
+        android:background="@drawable/img_shaddow" />
 
 </LinearLayout>

@@ -25,7 +25,7 @@ public class DetailsView extends Activity {
     private Spinner buttonPositionSpinner;
     private TextView iconView;
 
-    private int[] productImages = {R.drawable.coffee_icon, R.drawable.light_icon, R.drawable.music_icon, R.drawable.standlight_blue, R.drawable.standlight_green, R.drawable.standlight_turkies, R.drawable.standlight_turkies, R.drawable.standlight_red};
+    private int[] productImages = {R.drawable.coffee_icon, R.drawable.light_icon};
     private String[] iconArray;
 
     private int currentProductImage = 0;

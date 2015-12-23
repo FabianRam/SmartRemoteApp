@@ -11,7 +11,6 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 public class ButtonChooser extends AppCompatActivity {
 
@@ -54,7 +53,7 @@ public class ButtonChooser extends AppCompatActivity {
 
         amountOfBigPannels = 4;
         for (int j = 0; j < amountOfBigPannels; j++) {
-            LinearLayout customBigButtonPanel = (LinearLayout) inflater.inflate(R.layout.big_buton_pannel, null);
+            LinearLayout customBigButtonPanel = (LinearLayout) inflater.inflate(R.layout.pannel_big_buton, null);
             linearLayoutDrawer.addView(customBigButtonPanel);
             horizontalScrollView = (HorizontalScrollView) customBigButtonPanel.getChildAt(1);
             horizontalButtonLayout = (LinearLayout) horizontalScrollView.getChildAt(0);
@@ -62,7 +61,7 @@ public class ButtonChooser extends AppCompatActivity {
 
             amountOfSingleButtonPannels = 8;
             for (int i = 0; i < stereoImages.length; i++) {
-                FrameLayout custom = (FrameLayout) inflater.inflate(R.layout.single_button_pannel, null);
+                FrameLayout custom = (FrameLayout) inflater.inflate(R.layout.pannel_single_button, null);
                 horizontalButtonLayout.addView(custom);
                 LinearLayout v=(LinearLayout) custom.getChildAt(0);
                 Button button =(Button) v.getChildAt(0);

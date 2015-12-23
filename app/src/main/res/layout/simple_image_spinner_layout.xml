@@ -24,7 +24,7 @@
         android:id="@+id/spinneritem_iv"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:background="@drawable/standlight_red"
+        android:background="@drawable/logo_remote"
         android:layout_margin="5dp"
         android:layout_marginLeft="0dp" />
 

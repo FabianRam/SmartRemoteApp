@@ -63,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
         setContentView(R.layout.activity_main);
         //--------------------- setup costum font
         TypefaceUtil.overrideFont(getApplicationContext(), "SERIF", "JosefinSans-Regular.ttf");

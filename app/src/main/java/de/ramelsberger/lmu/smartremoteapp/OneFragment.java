@@ -1,21 +1,16 @@
 package de.ramelsberger.lmu.smartremoteapp;
 
 
-import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.nsd.NsdManager;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-
-import io.socket.client.Socket;
 
 //import info.androidhive.materialtabs.R;
 
@@ -59,7 +54,7 @@ public class OneFragment extends Fragment {
         //TODO
         // Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         //setSupportActionBar(toolbar);
-        View thisFragment = inflater.inflate(R.layout.fragment_one, container,false);
+        View thisFragment = inflater.inflate(R.layout.fragment_button_page, container,false);
         thisActivity= (MainActivity) getActivity();
         imageButtons =
                 new TextView[]{
