@@ -85,7 +85,7 @@ public class ButtonChooser extends AppCompatActivity {
                         intent1.putExtra("IconString", stereoImages[aNumber]);
 
 
-                        startActivity(intent1);
+                        startActivityForResult(intent1,2);
                     }
                 });
             }

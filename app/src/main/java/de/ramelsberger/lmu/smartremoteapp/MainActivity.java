@@ -78,15 +78,6 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
         //---------------------
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent1 = new Intent(thisActivity, ButtonChooser.class);
-                startActivity(intent1);
-            }
-        });
-
         Intent intent = new Intent(this, SocketIOService.class);
         startService(intent);
         bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
@@ -150,27 +141,27 @@ public class MainActivity extends AppCompatActivity {
             ImageButton button = (ImageButton) view;
             int resourceName = button.getId();
             switch (resourceName) {
-                case R.id.imageButton:
+                case R.id.remote_button1:
                     LIGHT_COLOR = RED_COLOR;
                     break;
 
-                case R.id.imageButton2:
+                case R.id.remote_button2:
                     LIGHT_COLOR = ORANGE_COLOR;
                     break;
 
-                case R.id.imageButton3:
+                case R.id.remote_button3:
                     LIGHT_COLOR = "#B23D2A";
                     break;
 
-                case R.id.imageButton4:
+                case R.id.remote_button4:
                     LIGHT_COLOR = BLUE_COLOR;
                     break;
 
-                case R.id.imageButton5:
+                case R.id.remote_button5:
                     LIGHT_COLOR = "#EFC94C";
                     break;
 
-                case R.id.imageButton6:
+                case R.id.remote_button6:
                     LIGHT_COLOR = "#42B264";
                     break;
 
