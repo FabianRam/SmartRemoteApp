@@ -10,7 +10,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 public class ButtonChooser extends AppCompatActivity {
 
@@ -23,6 +27,8 @@ public class ButtonChooser extends AppCompatActivity {
     private ButtonChooser thisAktivity;
 
     private String[] testArray = {"1aöjflkf", "2kjlödasföld", "3kölölkfasd", "4döljsa", "5dsölafd", "6daöskl"};
+    public static int clickedPosition;
+    public static int clickedFragmentID;
 
 
     @Override
@@ -30,46 +36,64 @@ public class ButtonChooser extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_buttton_chooser);
         //Typeface font = Typeface.createFromAsset( getAssets(), "../fontawesome-webfont.ttf");
-
         thisAktivity = this;
         // Button button = (Button)findViewById( R.id.panelAwsomeIcon );
         //  button.setTypeface(font);
         linearLayoutDrawer = (LinearLayout) findViewById(R.id.drawer_linear_parent);
 
-
         LayoutInflater inflater =(LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-
         //test
-
         Typeface fontAwesomeFont = Typeface.createFromAsset(getAssets(), "fontawesome-webfont.ttf");
 
-        final String[] stereoImages ={getString(R.string.font_awesome_backward),getString(R.string.font_awesome_fa_fast_forward)
-                ,getString(R.string.font_awesome_fa_forward),getString(R.string.font_awesome_fa_music),
-                getString(R.string.font_awesome_fa_circle),getString(R.string.font_awesome_fa_pause_circle),
-                getString(R.string.font_awesome_fa_pause_circle)};
+        final int[] lightIcons ={R.drawable.icon_lights_blue,R.drawable.icon_lights_green,
+                R.drawable.icon_lights_red,R.drawable.icon_lights_yellow,
+                R.drawable.icon_lights_brighter,R.drawable.icon_lights_fewer,
+                R.drawable.icon_lights_off,R.drawable.icon_lights_on
+                };
 
+        final  String[] lightIconString ={"Blue","Green","Red","Yellow",
+                "Brighter Light", "Darker Light","Lights Off","Lights On"};
+        final int[] steroIcons ={
+                R.drawable.icon_stereo_fastforward,R.drawable.icon_stereo_lastsong,
+                R.drawable.icon_stereo_play, R.drawable.icon_stereo_nextsong,R.drawable.icon_stereo_pause
+        };
+
+        final String[] steroStrings ={"Fastforward","Last song","Play","Next song", "Pause"};
+
+        final String[] headingStrings={"HUE Lights","Stereo images"};
+
+        final int[][] icons={lightIcons,steroIcons};
+        final String[][] strings ={lightIconString,steroStrings};
         ///
 
-        amountOfBigPannels = 4;
-        for (int j = 0; j < amountOfBigPannels; j++) {
+        clickedFragmentID=(int) getIntent().getExtras().get("FragmentId");
+        clickedPosition =(int) getIntent().getExtras().get("buttonPosition");
+
+        for (int j = 0; j < icons.length; j++) {
             LinearLayout customBigButtonPanel = (LinearLayout) inflater.inflate(R.layout.pannel_big_buton, null);
             linearLayoutDrawer.addView(customBigButtonPanel);
+
+            TextView deviceHeading =(TextView) customBigButtonPanel.getChildAt(0);
+            deviceHeading.setText(headingStrings[j]);
+
             horizontalScrollView = (HorizontalScrollView) customBigButtonPanel.getChildAt(1);
             horizontalButtonLayout = (LinearLayout) horizontalScrollView.getChildAt(0);
             final int deviceNumber = j;
 
             amountOfSingleButtonPannels = 8;
-            for (int i = 0; i < stereoImages.length; i++) {
+            for (int i = 0; i < icons[j].length; i++) {
                 FrameLayout custom = (FrameLayout) inflater.inflate(R.layout.pannel_single_button, null);
                 horizontalButtonLayout.addView(custom);
                 LinearLayout v=(LinearLayout) custom.getChildAt(0);
-                Button button =(Button) v.getChildAt(0);
-                button.setText(stereoImages[i]);
-                button.setTypeface(fontAwesomeFont);
+                ImageView buttonImage =(ImageView) v.getChildAt(0);
+                buttonImage.setImageDrawable(getDrawable(icons[j][i]));
 
+                TextView headingView =(TextView) v.getChildAt(1);
+                headingView.setText(strings[j][i]);
 
                 final int actionNumber = i;
+                //SetText
 
 
                 custom.setOnClickListener(new View.OnClickListener() {
@@ -81,11 +105,11 @@ public class ButtonChooser extends AppCompatActivity {
                         final int aNumber = actionNumber;
                         intent1.putExtra("deviceNumber", dNumber);
                         intent1.putExtra("actionNumber", aNumber);
-                        intent1.putExtra("TestString", testArray);
-                        intent1.putExtra("IconString", stereoImages[aNumber]);
+                        intent1.putExtra("TestString", headingStrings);
+                        intent1.putExtra("ActionStrings",strings[dNumber]);
+                        intent1.putExtra("IconDrawable", icons[dNumber]);
 
-
-                        startActivityForResult(intent1,2);
+                        startActivityForResult(intent1, 2);
                     }
                 });
             }

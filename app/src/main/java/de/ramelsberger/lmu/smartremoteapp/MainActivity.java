@@ -63,7 +63,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
         setContentView(R.layout.activity_main);
         //--------------------- setup costum font
         TypefaceUtil.overrideFont(getApplicationContext(), "SERIF", "JosefinSans-Regular.ttf");
@@ -76,8 +75,8 @@ public class MainActivity extends AppCompatActivity {
         setupViewPager(viewPager);
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
-        //---------------------
 
+        //---------------------
         Intent intent = new Intent(this, SocketIOService.class);
         startService(intent);
         bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
@@ -136,8 +135,6 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
             //TODO call action
-
-
             ImageButton button = (ImageButton) view;
             int resourceName = button.getId();
             switch (resourceName) {
@@ -227,27 +224,20 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void setupViewPager(ViewPager viewPager) {
-        Bundle bundle = getIntent().getExtras();
-        int highestNumber=0;
-
-
         int amountOfPages=DetailsView.lastAddedPosition/6+1;
-
-
 
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         for (int i =0;i<amountOfPages;i++) {
             if(DetailsView.maxPos%6==0) {
                 OneFragment oneFragment = new OneFragment();
                 oneFragment.setFragmentId(i);
-                adapter.addFrag(oneFragment, "Page " + i);
+                adapter.addFrag(oneFragment, "Page " + (i+1));
             }
         }
-
-           viewPager.setAdapter(adapter);
+        viewPager.setAdapter(adapter);
     }
 
-class ViewPagerAdapter extends FragmentPagerAdapter {
+    class ViewPagerAdapter extends FragmentPagerAdapter {
     private final List<Fragment> mFragmentList = new ArrayList<>();
     private final List<String> mFragmentTitleList = new ArrayList<>();
 
@@ -296,7 +286,6 @@ class ViewPagerAdapter extends FragmentPagerAdapter {
 
                 @Override
                 public void onDevicesReceived(JSONArray jsonArray) {
-
                 }
 
                 @Override

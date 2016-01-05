@@ -19,17 +19,11 @@ import java.util.ArrayList;
 
 public class OneFragment extends Fragment {
 
-    public static final String BLUE_COLOR = "#334D5C";
-    public static final String ORANGE_COLOR = "#E27A3F";
-    public static final String RED_COLOR = "#DF4949";
-    private static String LIGHT_COLOR = RED_COLOR;
-
-
     private static ArrayList<ButtonObject> buttonObjects;
 
     private MainActivity thisActivity;
     private ButtonObject draggedButtonObject;
-    TextView[] imageButtons;
+    ImageButton[] imageButtons;
 
     private NsdManager mNsdManager;
     private NsdManager.DiscoveryListener mDiscoveryListener;
@@ -66,34 +60,7 @@ public class OneFragment extends Fragment {
                 R.id.remote_button4, R.id.remote_button5, R.id.remote_button6};
         ImageButton[] remoteButtons = new ImageButton[6];
 
-        for (int i = 0; i < remoteButtonsId.length; i++) {
-
-            remoteButtons[i] = (ImageButton) thisFragment.findViewById(remoteButtonsId[i]);
-            remoteButtons[i].setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent1 = new Intent(thisActivity, ButtonChooser.class);
-                    startActivityForResult(intent1,1);
-                }
-            });
-        }
-
-
         thisActivity = (MainActivity) getActivity();
-        imageButtons =
-                new TextView[]{
-                        // (TextView) thisFragment.findViewById(R.id.imageButton),
-                        //(TextView) thisFragment.findViewById(R.id.imageButton2),
-                        //(TextView) thisFragment.findViewById(R.id.imageButton3),
-                        //(TextView) thisFragment.findViewById(R.id.imageButton4),
-                        //(TextView) thisFragment.findViewById(R.id.imageButton5),
-                        //(TextView) thisFragment.findViewById(R.id.imageButton6)
-                };
-
-        for (int i = 0; i < imageButtons.length; i++) {
-            imageButtons[i].setTag(i + 6 * fragmentId);
-        }
-
         Bundle bundle = thisActivity.getIntent().getExtras();
 
         //Get saved buttonObject from DetailsView
@@ -112,24 +79,29 @@ public class OneFragment extends Fragment {
             }
         }
 
-        Typeface fontAwesomeFont = Typeface.createFromAsset(thisActivity.getAssets(), "fontawesome-webfont.ttf");
-        int minus = 0;
-        if (fragmentId > 0)
-            minus = 1;
-        for (int i = fragmentId * 6 + minus; i < (fragmentId + 1) * 6; i++) {
-            if (i % 6 < buttonObjects.size()) {
-                if (buttonObjects.size() > i) {
-                    int index = (buttonObjects.get(i).getButtonPosition()) % 6;
-                    if (imageButtons[index] != null) {
-                        imageButtons[index].setTypeface(fontAwesomeFont);
-                        imageButtons[index].setText(buttonObjects.get(i).getButtonText());
-                        imageButtons[index].setTag(buttonObjects.get(i).getButtonPosition());
-                    }
+        for (int i = 0; i < remoteButtonsId.length; i++) {
+
+            remoteButtons[i] = (ImageButton) thisFragment.findViewById(remoteButtonsId[i]);
+
+            if(buttonObjects!=null)
+            for(int j=0;j<buttonObjects.size();j++) {
+                if (buttonObjects.get(j).getButtonPosition() == i+6*fragmentId)
+                {
+                    remoteButtons[i].setImageResource(buttonObjects.get(j).getButtonDrawable());
                 }
             }
+            final int buttonPosition=i;
+            remoteButtons[i].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent1 = new Intent(thisActivity, ButtonChooser.class);
+                    intent1.putExtra("buttonPosition",buttonPosition);
+                    intent1.putExtra("FragmentId",fragmentId);
+                    startActivityForResult(intent1,1);
+
+                }
+            });
         }
-
-
         return thisFragment;
     }
 

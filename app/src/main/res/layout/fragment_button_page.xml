@@ -31,31 +31,27 @@
 
 
                 <ImageButton
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_width="125dp"
+                    android:layout_height="125dp"
                     android:id="@+id/remote_button1"
-                    android:src="@drawable/img_new_button"
                     android:layout_gravity="right"
-                    android:layout_weight="1"
-                    android:background="@android:color/transparent"
+                    android:background="@drawable/blank_icon"
                     android:scaleType="fitCenter"
-                    android:layout_margin="20dp" />
+                    android:layout_margin="20dp"
+                    android:src="@drawable/no_icon"
+                    android:padding="20dp" />
 
                 <ImageButton
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_width="125dp"
+                    android:layout_height="125dp"
                     android:id="@+id/remote_button2"
-                    android:src="@drawable/img_new_button"
-
-                    android:textAlignment="center"
                     android:layout_gravity="right"
-                    android:layout_weight="1"
+                    android:background="@drawable/blank_icon"
                     android:scaleType="fitCenter"
-                    android:background="@android:color/transparent"
-                    android:layout_margin="20dp" >
+                    android:layout_margin="20dp"
+                    android:src="@drawable/no_icon"
+                    android:padding="20dp" />
 
-
-                </ImageButton>
             </LinearLayout>
 
             <LinearLayout
@@ -69,29 +65,26 @@
                 android:layout_weight="1" >
 
                 <ImageButton
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_width="125dp"
+                    android:layout_height="125dp"
                     android:id="@+id/remote_button3"
-                    android:src="@drawable/img_new_button"
-                    android:textAlignment="center"
                     android:layout_gravity="right"
-                    android:layout_weight="1"
+                    android:background="@drawable/blank_icon"
                     android:scaleType="fitCenter"
-                    android:background="@android:color/transparent"
-                    android:layout_margin="20dp" />
+                    android:layout_margin="20dp"
+                    android:src="@drawable/no_icon"
+                    android:padding="20dp" />
 
                 <ImageButton
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_width="125dp"
+                    android:layout_height="125dp"
                     android:id="@+id/remote_button4"
-                    android:src="@drawable/img_new_button"
-
-                    android:textAlignment="center"
                     android:layout_gravity="right"
-                    android:layout_weight="1"
+                    android:background="@drawable/blank_icon"
                     android:scaleType="fitCenter"
-                    android:background="@android:color/transparent"
-                    android:layout_margin="20dp" />
+                    android:layout_margin="20dp"
+                    android:src="@drawable/no_icon"
+                    android:padding="20dp" />
             </LinearLayout>
 
             <LinearLayout
@@ -105,30 +98,26 @@
                 android:layout_weight="1" >
 
                 <ImageButton
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_width="125dp"
+                    android:layout_height="125dp"
                     android:id="@+id/remote_button5"
-                    android:src="@drawable/img_new_button"
-
-                    android:textAlignment="center"
                     android:layout_gravity="right"
-                    android:layout_weight="1"
+                    android:background="@drawable/blank_icon"
                     android:scaleType="fitCenter"
-                    android:background="@android:color/transparent"
-                    android:layout_margin="20dp" />
+                    android:layout_margin="20dp"
+                    android:src="@drawable/no_icon"
+                    android:padding="20dp" />
 
                 <ImageButton
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_width="125dp"
+                    android:layout_height="125dp"
                     android:id="@+id/remote_button6"
-                    android:src="@drawable/img_new_button"
-
-                    android:textAlignment="center"
                     android:layout_gravity="right"
-                    android:layout_weight="1"
+                    android:background="@drawable/blank_icon"
                     android:scaleType="fitCenter"
-                    android:background="@android:color/transparent"
-                    android:layout_margin="20dp" />
+                    android:layout_margin="20dp"
+                    android:src="@drawable/no_icon"
+                    android:padding="20dp" />
             </LinearLayout>
 
 

@@ -18,15 +18,14 @@
         android:paddingBottom="10dp"
         android:paddingTop="10dp">
 
-        <Button
-            android:id="@+id/panelAwsomeIcon"
+        <ImageView
             android:layout_width="60dp"
             android:layout_height="60dp"
+            android:id="@+id/panelAwsomeIcon"
             android:background="@drawable/roundcorner"
-            android:text="@string/font_awesome_android_icon"
-            android:textColor="@color/darkBlue"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:clickable="false"/>
+            android:clickable="false"
+            android:src="@drawable/icon_stereo_fastforward"
+            android:padding="15dp" />
 
         <TextView
             android:id="@+id/pannelHeading"

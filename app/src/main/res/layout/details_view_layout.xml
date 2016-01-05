@@ -33,7 +33,7 @@
             android:orientation="vertical"
             android:paddingTop="25dp">
 
-            <TextView
+            <ImageView
                 android:id="@+id/imageViewNewButtonIcon"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
@@ -41,10 +41,8 @@
                 android:layout_marginBottom="20dp"
                 android:background="@drawable/roundcorner"
                 android:gravity="center_vertical|center_horizontal"
-                android:padding="0dp"
-                android:src="@drawable/coffee_icon"
-                                android:text="Replace"
-                android:textSize="80dp"
+                android:padding="20dp"
+                android:src="@drawable/icon_lights_on"
                 android:textColor="@color/darkBlue" />
 
             <LinearLayout

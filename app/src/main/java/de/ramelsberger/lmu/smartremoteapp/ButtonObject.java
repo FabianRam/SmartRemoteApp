@@ -1,5 +1,6 @@
 package de.ramelsberger.lmu.smartremoteapp;
 
+import android.graphics.drawable.Drawable;
 import android.os.Parcel;
 
 import java.io.Serializable;
@@ -9,16 +10,16 @@ import java.io.Serializable;
  */
 public class ButtonObject implements Serializable {
     private int imageId;
-    private String buttonText;
+    private int buttonDrawable;
     private String actionText;
 
     private int buttonPosition;
 
 
-    public ButtonObject(int imageId, int buttonPosition, String buttonText, String actionText) {
+    public ButtonObject(int imageId, int buttonPosition, int buttonDrawable, String actionText) {
         this.imageId = imageId;
         this.buttonPosition = buttonPosition;
-        this.buttonText = buttonText;
+        this.buttonDrawable = buttonDrawable;
         this.actionText = actionText;
     }
 
@@ -26,12 +27,6 @@ public class ButtonObject implements Serializable {
     //-------------------------------- getter and setter
 
 
-    protected ButtonObject(Parcel in) {
-        imageId = in.readInt();
-        buttonText = in.readString();
-        actionText = in.readString();
-        buttonPosition = in.readInt();
-    }
 
     public void setButtonPosition(int buttonPosition) {
         this.buttonPosition = buttonPosition;
@@ -49,12 +44,12 @@ public class ButtonObject implements Serializable {
         return imageId;
     }
 
-    public void setButtonText(String buttonText) {
-        this.buttonText = buttonText;
+    public void setButtonText(int buttonDrawable) {
+        this.buttonDrawable = buttonDrawable;
     }
 
-    public String getButtonText() {
-        return buttonText;
+    public int getButtonDrawable() {
+        return buttonDrawable;
     }
 
     public void setActionText(String actionText) {
