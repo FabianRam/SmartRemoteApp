@@ -96,7 +96,7 @@ public class ButtonChooser extends AppCompatActivity {
                         intent1.putExtra("ActionStrings",strings[dNumber]);
                         intent1.putExtra("IconDrawable", icons[dNumber]);
 
-                        startActivityForResult(intent1, 2);
+                        startActivityForResult(intent1, 2);//TODO
                     }
                 });
             }

@@ -1,16 +1,12 @@
 package de.ramelsberger.lmu.smartremoteapp;
 
-import android.app.Activity;
 import android.content.ClipData;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.net.nsd.NsdManager;
-import android.net.nsd.NsdServiceInfo;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -18,7 +14,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.DragEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,13 +23,8 @@ import android.widget.ImageButton;
 
 import org.json.JSONArray;
 
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
-
-import io.socket.client.IO;
-import io.socket.client.Socket;
-import io.socket.emitter.Emitter;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -225,14 +215,19 @@ public class MainActivity extends AppCompatActivity {
         int amountOfPages=DetailsView.lastAddedPosition/6+1;
 
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        PageFragment defaultFragment = new PageFragment();
+        adapter.addFrag(defaultFragment, "Default Page");
+        defaultFragment.setFragmentId(0);
+
         for (int i =0;i<amountOfPages;i++) {
             if(DetailsView.maxPos%6==0) {
-                OneFragment oneFragment = new OneFragment();
-                oneFragment.setFragmentId(i);
+                PageFragment oneFragment = new PageFragment();
+                oneFragment.setFragmentId((i+1));//i +1 because of the default page
                 adapter.addFrag(oneFragment, "Page " + (i+1));
             }
         }
         viewPager.setAdapter(adapter);
+        viewPager.setCurrentItem(1);
     }
 
     class ViewPagerAdapter extends FragmentPagerAdapter {
@@ -284,11 +279,14 @@ public class MainActivity extends AppCompatActivity {
 
                 @Override
                 public void onDevicesReceived(JSONArray jsonArray) {
+                    //auslassen da eh blos hue
                 }
 
                 @Override
                 public void onActionsReceived(JSONArray jsonArray) {
+                    //TODO rausparsen
 
+                    //
                 }
             });
             mBound = true;

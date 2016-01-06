@@ -17,8 +17,9 @@ import java.util.ArrayList;
 //import info.androidhive.materialtabs.R;
 
 
-public class OneFragment extends Fragment {
+public class PageFragment extends Fragment {
 
+    private static final int DEFAULT_PAGE = 0;
     private static ArrayList<ButtonObject> buttonObjects;
 
     private MainActivity thisActivity;
@@ -31,7 +32,7 @@ public class OneFragment extends Fragment {
     private int fragmentId;
 
 
-    public OneFragment() {
+    public PageFragment() {
         // Required empty public constructor
     }
 
@@ -47,8 +48,8 @@ public class OneFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-
-        //Add new Button
+        if(fragmentId==DEFAULT_PAGE)//
+            setDefaultButtons(); //TODO get information from the server
 
 
         //TODO
@@ -103,6 +104,16 @@ public class OneFragment extends Fragment {
             });
         }
         return thisFragment;
+    }
+
+    private void setDefaultButtons() {
+        /*buttonObjects.add(new ButtonObject(5,0,R.drawable.icon_lights_fewer,"fewerLight"));
+        buttonObjects.add(new ButtonObject(0,1,R.drawable.icon_lights_blue,"blue"));
+        buttonObjects.add(new ButtonObject(6,2,R.drawable.icon_lights_off,"lightsOff"));
+        buttonObjects.add(new ButtonObject(4,3,R.drawable.icon_stereo_pause,"pause"));
+        buttonObjects.add(new ButtonObject(4,4,R.drawable.icon_stereo_pause,"pause"));
+        buttonObjects.add(new ButtonObject(4,5,R.drawable.icon_stereo_pause,"pause"));
+        */
     }
 
     public void setFragmentId(int id) {

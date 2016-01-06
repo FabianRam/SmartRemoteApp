@@ -70,7 +70,9 @@ public class DetailsView extends Activity {
         backButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent1 = new Intent(thisActivity, ButtonChooser.class);
-                startActivityForResult(intent1,3);
+                setResult(3);
+                finish();
+
             }
         });
 
@@ -92,7 +94,7 @@ public class DetailsView extends Activity {
                 } 
                 intent1.putExtras(b);
                 lastAddedPosition++;
-                startActivity(intent1);
+                startActivity(intent1);//TODO for result
 
             }
         });

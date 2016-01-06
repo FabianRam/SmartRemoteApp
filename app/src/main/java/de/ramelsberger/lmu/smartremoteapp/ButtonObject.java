@@ -15,6 +15,12 @@ public class ButtonObject implements Serializable {
 
     private int buttonPosition;
 
+    //id
+    //eingelogter User
+    //deivce
+    //name
+    //action
+    //icon
 
     public ButtonObject(int imageId, int buttonPosition, int buttonDrawable, String actionText) {
         this.imageId = imageId;

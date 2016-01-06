@@ -47,7 +47,6 @@
     </style>
 
     <style name="ListViewSpinnerTheme" parent="android:Widget.ListView">
-        <item name="android:listSelector">@drawable/choosen_page_bubble</item>
     </style>
 
     <style name="ListViewSpinnerTheme.White" parent="android:Widget.ListView.White">
