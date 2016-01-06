@@ -99,7 +99,6 @@ public class PageFragment extends Fragment {
                     intent1.putExtra("buttonPosition",buttonPosition);
                     intent1.putExtra("FragmentId",fragmentId);
                     startActivityForResult(intent1,1);
-
                 }
             });
         }

@@ -285,8 +285,6 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onActionsReceived(JSONArray jsonArray) {
                     //TODO rausparsen
-
-                    //
                 }
             });
             mBound = true;
