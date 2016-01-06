@@ -131,10 +131,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private class StartActionTouchListener implements View.OnTouchListener {
+    private class StartActionTouchListener implements View.OnTouchListener {//TODO give rigth information to the server
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
-            //TODO call action
             ImageButton button = (ImageButton) view;
             int resourceName = button.getId();
             switch (resourceName) {
@@ -221,7 +220,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-
 
     private void setupViewPager(ViewPager viewPager) {
         int amountOfPages=DetailsView.lastAddedPosition/6+1;

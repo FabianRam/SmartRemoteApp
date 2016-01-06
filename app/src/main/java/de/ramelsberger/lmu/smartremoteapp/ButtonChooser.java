@@ -19,34 +19,22 @@ import org.w3c.dom.Text;
 public class ButtonChooser extends AppCompatActivity {
 
     private LinearLayout linearLayoutDrawer;
-    private FrameLayout bigButtonPannel;
     private HorizontalScrollView horizontalScrollView;
     private LinearLayout horizontalButtonLayout;
-    private int amountOfBigPannels;
-    private int amountOfSingleButtonPannels;
     private ButtonChooser thisAktivity;
 
-    private String[] testArray = {"1aöjflkf", "2kjlödasföld", "3kölölkfasd", "4döljsa", "5dsölafd", "6daöskl"};
     public static int clickedPosition;
     public static int clickedFragmentID;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_buttton_chooser);
-        //Typeface font = Typeface.createFromAsset( getAssets(), "../fontawesome-webfont.ttf");
         thisAktivity = this;
-        // Button button = (Button)findViewById( R.id.panelAwsomeIcon );
-        //  button.setTypeface(font);
         linearLayoutDrawer = (LinearLayout) findViewById(R.id.drawer_linear_parent);
-
         LayoutInflater inflater =(LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        //test
-        Typeface fontAwesomeFont = Typeface.createFromAsset(getAssets(), "fontawesome-webfont.ttf");
-
-        final int[] lightIcons ={R.drawable.icon_lights_blue,R.drawable.icon_lights_green,
+        final int[] lightIcons ={R.drawable.icon_lights_blue,R.drawable.icon_lights_green,//TODO get this informations from the server
                 R.drawable.icon_lights_red,R.drawable.icon_lights_yellow,
                 R.drawable.icon_lights_brighter,R.drawable.icon_lights_fewer,
                 R.drawable.icon_lights_off,R.drawable.icon_lights_on
@@ -65,10 +53,11 @@ public class ButtonChooser extends AppCompatActivity {
 
         final int[][] icons={lightIcons,steroIcons};
         final String[][] strings ={lightIconString,steroStrings};
-        ///
 
-        clickedFragmentID=(int) getIntent().getExtras().get("FragmentId");
-        clickedPosition =(int) getIntent().getExtras().get("buttonPosition");
+        if(getIntent().getExtras()!=null) {
+            clickedFragmentID = (int) getIntent().getExtras().get("FragmentId");
+            clickedPosition = (int) getIntent().getExtras().get("buttonPosition");
+        }
 
         for (int j = 0; j < icons.length; j++) {
             LinearLayout customBigButtonPanel = (LinearLayout) inflater.inflate(R.layout.pannel_big_buton, null);
@@ -81,7 +70,6 @@ public class ButtonChooser extends AppCompatActivity {
             horizontalButtonLayout = (LinearLayout) horizontalScrollView.getChildAt(0);
             final int deviceNumber = j;
 
-            amountOfSingleButtonPannels = 8;
             for (int i = 0; i < icons[j].length; i++) {
                 FrameLayout custom = (FrameLayout) inflater.inflate(R.layout.pannel_single_button, null);
                 horizontalButtonLayout.addView(custom);
@@ -94,7 +82,6 @@ public class ButtonChooser extends AppCompatActivity {
 
                 final int actionNumber = i;
                 //SetText
-
 
                 custom.setOnClickListener(new View.OnClickListener() {
                     @Override
