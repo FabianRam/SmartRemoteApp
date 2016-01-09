@@ -2,7 +2,9 @@ package de.ramelsberger.lmu.smartremoteapp;
 
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.net.nsd.NsdManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -48,8 +50,10 @@ public class PageFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-        if(fragmentId==DEFAULT_PAGE)//
-            setDefaultButtons(); //TODO get information from the server
+        if(fragmentId==DEFAULT_PAGE) {//
+            //TODO get information from the server
+        }
+
 
 
         //TODO
@@ -88,7 +92,11 @@ public class PageFragment extends Fragment {
             for(int j=0;j<buttonObjects.size();j++) {
                 if (buttonObjects.get(j).getButtonPosition() == i+6*fragmentId)
                 {
-                    remoteButtons[i].setImageResource(buttonObjects.get(j).getButtonDrawable());
+                    Resources res = thisActivity.getResources();
+                    String mDrawableName = buttonObjects.get(j).getIconDescription();
+                    int resID = res.getIdentifier(mDrawableName , "drawable", thisActivity.getPackageName());
+                    Drawable drawable = res.getDrawable(resID );
+                    remoteButtons[i].setImageDrawable(drawable);
                 }
             }
             final int buttonPosition=i;
@@ -103,16 +111,6 @@ public class PageFragment extends Fragment {
             });
         }
         return thisFragment;
-    }
-
-    private void setDefaultButtons() {
-        /*buttonObjects.add(new ButtonObject(5,0,R.drawable.icon_lights_fewer,"fewerLight"));
-        buttonObjects.add(new ButtonObject(0,1,R.drawable.icon_lights_blue,"blue"));
-        buttonObjects.add(new ButtonObject(6,2,R.drawable.icon_lights_off,"lightsOff"));
-        buttonObjects.add(new ButtonObject(4,3,R.drawable.icon_stereo_pause,"pause"));
-        buttonObjects.add(new ButtonObject(4,4,R.drawable.icon_stereo_pause,"pause"));
-        buttonObjects.add(new ButtonObject(4,5,R.drawable.icon_stereo_pause,"pause"));
-        */
     }
 
     public void setFragmentId(int id) {

@@ -92,7 +92,7 @@ public class ButtonChooser extends AppCompatActivity {
                         final int aNumber = actionNumber;
                         intent1.putExtra("deviceNumber", dNumber);
                         intent1.putExtra("actionNumber", aNumber);
-                        intent1.putExtra("TestString", headingStrings);
+                        intent1.putExtra("DeviceString", headingStrings);
                         intent1.putExtra("ActionStrings",strings[dNumber]);
                         intent1.putExtra("IconDrawable", icons[dNumber]);
 

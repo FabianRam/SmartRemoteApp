@@ -10,6 +10,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 /**
@@ -60,6 +63,7 @@ public class DetailsView extends Activity {
         iconSpinner.setSelection(actionNumber);
 
         iconView.setImageResource(icons[actionNumber]);
+
         ArrayList<String> positions=new ArrayList<String>();
         for (int i =0;i<(ButtonChooser.clickedFragmentID+1)*6;i++){
             positions.add("Position "+(i+1)+" Page "+(i/6+1));
@@ -82,6 +86,25 @@ public class DetailsView extends Activity {
         deviceActionSpinner.setSelection(actionNumber);
     }
 
+    //------------------------json Converter
+
+    public JSONObject toJSON(ButtonObject buttonObject){
+
+        JSONObject jsonObject= new JSONObject();
+        try {
+            jsonObject.put("name", buttonObject.getDeviceName());
+            jsonObject.put("beschreibung", buttonObject.getActionName());
+            jsonObject.put("icon", buttonObject.getIconDescription());
+            //TODO positions?
+            return jsonObject;
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return jsonObject;
+        }
+
+    }
+
     //-----------------------listeners
 
     private void initializeListener() {
@@ -96,7 +119,13 @@ public class DetailsView extends Activity {
 
         acceptButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                ButtonObject buttonObject = new ButtonObject(currentProductImage, selectedPosition, icons[actionNumber], "TODO");
+                ButtonObject buttonObject = new ButtonObject(deviceString[deviceNumber],actionArray[actionNumber],
+                        getResources().getResourceName(icons[actionNumber]), selectedPosition);
+                //Convert object to JSON in Android
+                JSONObject jsonButton = toJSON(buttonObject);
+                //TODO store actions?
+
+                //
                 Intent intent1 = new Intent(thisActivity, MainActivity.class);
                 Bundle b;
                 if (intent1.getExtras() != null) {
@@ -105,6 +134,8 @@ public class DetailsView extends Activity {
                     b = new Bundle();
                 }
                 b.putSerializable("newButtonObject", buttonObject);//ButtonObject wich contains all important information about the button
+                //TODO remove putSerialize?
+
                 int highestPosition = buttonObject.getButtonPosition();
                 if (highestPosition < maxPos) {
                     maxPos = highestPosition;
@@ -134,6 +165,7 @@ public class DetailsView extends Activity {
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 selectedPosition = (int) id;
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {
             }
@@ -145,7 +177,7 @@ public class DetailsView extends Activity {
     private void getExtrasFromButtonChooser() {
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            deviceString = extras.getStringArray("TestString");
+            deviceString = extras.getStringArray("DeviceString");
             actionArray = extras.getStringArray("ActionStrings");
             deviceNumber = extras.getInt("deviceNumber");
             actionNumber = extras.getInt("actionNumber");

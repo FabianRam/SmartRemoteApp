@@ -5,6 +5,8 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.design.widget.TabLayout;
@@ -22,6 +24,8 @@ import android.view.View;
 import android.widget.ImageButton;
 
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -192,7 +196,13 @@ public class MainActivity extends AppCompatActivity {
 
                     if (oldButton != targetButton && targetButton != null && draggedButtonObject != null) {
                         oldButton.setImageResource(android.R.color.transparent);
-                        targetButton.setImageResource(draggedButtonObject.getImageId());
+
+                        Resources res = getResources();
+                        String mDrawableName = draggedButtonObject.getIconDescription();
+                        int resID = res.getIdentifier(mDrawableName , "drawable", getPackageName());
+                        Drawable drawable = res.getDrawable(resID );
+                        targetButton.setImageDrawable(drawable);
+
                         Integer newPos = (Integer) targetButton.getTag();
                         draggedButtonObject.setButtonPosition(newPos);
                     }
@@ -285,6 +295,25 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onActionsReceived(JSONArray jsonArray) {
                     //TODO rausparsen
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject jsonobject = null;
+                        try {
+                            jsonobject = jsonArray.getJSONObject(i);
+                            int userId = (int)Math.random()*8;//TODO
+                            int deviceId = (int)Math.random()*3;//TODO
+                            String deviceName = jsonobject.getString("name");
+                            String actionName = jsonobject.getString("beschreibung");
+                            String iconBeschreibung = jsonobject.getString("icon");
+                            int position = i;
+                            ButtonObject buttonObject = new ButtonObject(userId,deviceId,deviceName,actionName,iconBeschreibung,position);
+                            buttonObjects.add(buttonObject);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+
+
                 }
             });
             mBound = true;

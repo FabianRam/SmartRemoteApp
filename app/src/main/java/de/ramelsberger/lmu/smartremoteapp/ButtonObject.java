@@ -9,61 +9,81 @@ import java.io.Serializable;
  * Created by Fabian on 13.11.2015.
  */
 public class ButtonObject implements Serializable {
-    private int imageId;
-    private int buttonDrawable;
-    private String actionText;
+
+    private int userID;
+    private int deviceID;
+    private String deviceName;
+    private String actionName;
+    private String iconDescription;
 
     private int buttonPosition;
 
-    //id
-    //eingelogter User
-    //deivce
-    //name
-    //action
-    //icon
+    //complete Constructor
 
-    public ButtonObject(int imageId, int buttonPosition, int buttonDrawable, String actionText) {
-        this.imageId = imageId;
-        this.buttonPosition = buttonPosition;
-        this.buttonDrawable = buttonDrawable;
-        this.actionText = actionText;
+
+    //Constructor withoud device and action id
+    public ButtonObject(String deviceName, String actionName, String iconDescription,int buttonPosition) {
+        this.deviceName = deviceName;
+        this.actionName = actionName;
+        this.iconDescription = iconDescription;
+        this.buttonPosition=buttonPosition;
+
     }
 
-
-    //-------------------------------- getter and setter
-
-
-
-    public void setButtonPosition(int buttonPosition) {
-        this.buttonPosition = buttonPosition;
+    public ButtonObject(int userId, int deviceId, String deviceName, String actionName, String iconBeschreibung, int position) {
+        this.userID=userId;
+        this.deviceID=deviceId;
+        this.deviceName=deviceName;
+        this.actionName=actionName;
+        this.iconDescription=iconBeschreibung;
+        this.buttonPosition=position;
     }
 
     public int getButtonPosition() {
         return buttonPosition;
     }
 
-    public void setImageId(int imageId) {
-        this.imageId = imageId;
+    public void setButtonPosition(int buttonPosition) {
+        this.buttonPosition = buttonPosition;
     }
 
-    public int getImageId() {
-        return imageId;
+    public int getUserID() {
+        return userID;
     }
 
-    public void setButtonText(int buttonDrawable) {
-        this.buttonDrawable = buttonDrawable;
+    public void setUserID(int userID) {
+        this.userID = userID;
     }
 
-    public int getButtonDrawable() {
-        return buttonDrawable;
+    public int getDeviceID() {
+        return deviceID;
     }
 
-    public void setActionText(String actionText) {
-        this.actionText = actionText;
+    public void setDeviceID(int deviceID) {
+        this.deviceID = deviceID;
     }
 
-    public String getActionText() {
-        return actionText;
+    public String getDeviceName() {
+        return deviceName;
     }
 
+    public void setDeviceName(String deviceName) {
+        this.deviceName = deviceName;
+    }
+
+    public String getActionName() {
+        return actionName;
+    }
+
+    public void setActionName(String actionName) {
+        this.actionName = actionName;
+    }
+
+    public String getIconDescription() {
+        return iconDescription;
+    }
+
+    public void setIconDescription(String iconDescription) {
+        this.iconDescription = iconDescription;
+    }
 }
