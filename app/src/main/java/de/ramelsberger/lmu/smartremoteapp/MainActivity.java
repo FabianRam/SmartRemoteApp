@@ -16,6 +16,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.DragEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -155,12 +156,10 @@ public class MainActivity extends AppCompatActivity {
                     LIGHT_COLOR = "#42B264";
                     break;
 
-
                 default:
                     LIGHT_COLOR = ORANGE_COLOR;
                     break;
             }
-
 
             mService.send("setLight", LIGHT_COLOR);
             return false;
@@ -217,12 +216,10 @@ public class MainActivity extends AppCompatActivity {
             }
             return true;
         }
-
-
     }
 
     private void setupViewPager(ViewPager viewPager) {
-        int amountOfPages=DetailsView.lastAddedPosition/6+1;
+        int amountOfPages=DetailsView.lastAddedPosition/6+1;//because of the default view
 
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         PageFragment defaultFragment = new PageFragment();
@@ -230,7 +227,7 @@ public class MainActivity extends AppCompatActivity {
         defaultFragment.setFragmentId(0);
 
         for (int i =0;i<amountOfPages;i++) {
-            if(DetailsView.maxPos%6==0) {
+            if(DetailsView.maxPos%6==0) {//do not create a new page when the default page if full
                 PageFragment oneFragment = new PageFragment();
                 oneFragment.setFragmentId((i+1));//i +1 because of the default page
                 adapter.addFrag(oneFragment, "Page " + (i+1));

@@ -136,12 +136,14 @@ public class DetailsView extends Activity {
                 b.putSerializable("newButtonObject", buttonObject);//ButtonObject wich contains all important information about the button
                 //TODO remove putSerialize?
 
+
                 int highestPosition = buttonObject.getButtonPosition();
                 if (highestPosition < maxPos) {
                     maxPos = highestPosition;
                 }
                 intent1.putExtras(b);
-                lastAddedPosition++;
+                if(ButtonChooser.clickedFragmentID!=0)//because of default page
+                  lastAddedPosition++;
                 startActivity(intent1);//TODO for result
             }
         });
