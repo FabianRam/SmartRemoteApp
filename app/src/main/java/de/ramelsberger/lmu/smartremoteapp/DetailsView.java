@@ -44,6 +44,8 @@ public class DetailsView extends Activity {
     private int[] icons;
     private int actionNumber;
     private int deviceNumber;
+    private String actionDescription="";//TODO
+    private String deviceID;
 
 
     @Override
@@ -86,24 +88,6 @@ public class DetailsView extends Activity {
         deviceActionSpinner.setSelection(actionNumber);
     }
 
-    //------------------------json Converter
-
-    public JSONObject toJSON(ButtonObject buttonObject){
-
-        JSONObject jsonObject= new JSONObject();
-        try {
-            jsonObject.put("name", buttonObject.getDeviceName());
-            jsonObject.put("beschreibung", buttonObject.getActionName());
-            jsonObject.put("icon", buttonObject.getIconDescription());
-            //TODO positions?
-            return jsonObject;
-        } catch (JSONException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            return jsonObject;
-        }
-
-    }
 
     //-----------------------listeners
 
@@ -119,13 +103,12 @@ public class DetailsView extends Activity {
 
         acceptButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                ButtonObject buttonObject = new ButtonObject(deviceString[deviceNumber],actionArray[actionNumber],
+                ButtonObject buttonObject = new ButtonObject(deviceID,deviceString[deviceNumber],actionArray[actionNumber],actionDescription,//
                         getResources().getResourceName(icons[actionNumber]), selectedPosition);
                 //Convert object to JSON in Android
-                JSONObject jsonButton = toJSON(buttonObject);
-                //TODO store actions?
+                JSONObject jsonButton = buttonObject.toJSON();
 
-                //
+
                 Intent intent1 = new Intent(thisActivity, MainActivity.class);
                 Bundle b;
                 if (intent1.getExtras() != null) {
@@ -133,7 +116,8 @@ public class DetailsView extends Activity {
                 } else {
                     b = new Bundle();
                 }
-                b.putSerializable("newButtonObject", buttonObject);//ButtonObject wich contains all important information about the button
+                //b.putSerializable("newButtonObject", buttonObject);//ButtonObject wich contains all important information about the button
+                b.putString("newButtonJSON",jsonButton.toString());
                 //TODO remove putSerialize?
 
 
@@ -179,6 +163,7 @@ public class DetailsView extends Activity {
     private void getExtrasFromButtonChooser() {
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
+            deviceID = extras.getString("deviceId");
             deviceString = extras.getStringArray("DeviceString");
             actionArray = extras.getStringArray("ActionStrings");
             deviceNumber = extras.getInt("deviceNumber");

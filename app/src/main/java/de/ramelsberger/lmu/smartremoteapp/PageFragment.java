@@ -14,6 +14,9 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 //import info.androidhive.materialtabs.R;
@@ -50,11 +53,6 @@ public class PageFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-        if(fragmentId==DEFAULT_PAGE) {//
-            //TODO get information from the server
-        }
-
-
 
         //TODO
         // Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -73,15 +71,22 @@ public class PageFragment extends Fragment {
             buttonObjects = new ArrayList<>();
 
         //TODO Add server mehtod
-        if (bundle != null) {
-            if (bundle.containsKey("newButtonObject")) {
-                if (buttonObjects == null)
-                    buttonObjects = new ArrayList<>();
+        if (bundle != null) if (bundle.containsKey("newButtonJSON")) {
+            if (buttonObjects == null)
+                buttonObjects = new ArrayList<>();
 
-                ButtonObject newButtonObject = (ButtonObject) bundle.getSerializable("newButtonObject");
-                buttonObjects.add(newButtonObject);
+            JSONObject newButtonObject;
 
+            try {
+                newButtonObject = new JSONObject(bundle.getString("newButtonObject"));
+                ((MainActivity) getActivity()).storeAction(newButtonObject);
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
+            //Intent mainAktivityIntent =
+            //buttonObjects.add(newButtonObject);
+            //buttonObjects.add(newButtonObject);
+
         }
 
         for (int i = 0; i < remoteButtonsId.length; i++) {

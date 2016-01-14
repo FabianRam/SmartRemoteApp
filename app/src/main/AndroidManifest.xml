@@ -42,9 +42,10 @@
         </activity>
 
         <service
-            android:name=".SocketIOService"
+            android:name="de.ramelsberger.lmu.smartremoteapp.SocketIOService"
             android:enabled="false"
-            android:exported="false"></service>
+            android:exported="false"
+            ></service>
     </application>
 
 </manifest>

@@ -16,6 +16,11 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.sql.Array;
+import java.util.ArrayList;
+
+import static de.ramelsberger.lmu.smartremoteapp.MainActivity.proposals;
+
 public class ButtonChooser extends AppCompatActivity {
 
     private LinearLayout linearLayoutDrawer;
@@ -25,6 +30,8 @@ public class ButtonChooser extends AppCompatActivity {
 
     public static int clickedPosition;
     public static int clickedFragmentID;
+    private ArrayList<String> headingStrings;
+    private ArrayList<String> deviceId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +56,44 @@ public class ButtonChooser extends AppCompatActivity {
 
         final String[] steroStrings ={"Fastforward","Last song","Play","Next song", "Pause"};
 
-        final String[] headingStrings={"HUE Lights","Stereo images"};
+        ArrayList differentTypes= new ArrayList();
+        boolean typeIsNew;
+        int currentType=0;
+
+        if(proposals!=null) {
+            for (int i = 0; i < proposals.size(); i++) {
+                typeIsNew = true;
+                for (int j = 0; j < differentTypes.size(); j++) {
+                    if (proposals.get(i).getType() == differentTypes.get(j)) {
+                        typeIsNew = false;
+                    }
+                }
+                if (typeIsNew)
+                    currentType++;
+                differentTypes.add(proposals.get(i));
+            }
+        }
+
+        //----------------------------------------------headings //initialize variables
+        headingStrings=new ArrayList<>();
+        deviceId= new ArrayList<>();
+        ArrayList<ArrayList> listOfAllDevices=new ArrayList();
+        for(int i=0;i<headingStrings.size();i++) {
+            headingStrings.add(MainActivity.deviceObjects.get(i).getDeviceName());
+            for (int j=0;j<headingStrings.size();j++){
+                if(listOfAllDevices.get(i)==null) {
+                    ArrayList<ProposalObject> deviceActions = new ArrayList();
+                    listOfAllDevices.add(deviceActions);
+                }
+                if(headingStrings.get(i)==proposals.get(j).getType()){
+                    listOfAllDevices.get(i).add(proposals.get(i));
+                }
+            }
+            deviceId.add(MainActivity.deviceObjects.get(i).getDeviceId());
+        }
+
+
+
 
         final int[][] icons={lightIcons,steroIcons};
         final String[][] strings ={lightIconString,steroStrings};
@@ -59,43 +103,41 @@ public class ButtonChooser extends AppCompatActivity {
             clickedPosition = (int) getIntent().getExtras().get("buttonPosition");
         }
 
-        for (int j = 0; j < icons.length; j++) {
+        for (int j = 0; j < headingStrings.size(); j++) {
             LinearLayout customBigButtonPanel = (LinearLayout) inflater.inflate(R.layout.pannel_big_buton, null);
             linearLayoutDrawer.addView(customBigButtonPanel);
 
             TextView deviceHeading =(TextView) customBigButtonPanel.getChildAt(0);
-            deviceHeading.setText(headingStrings[j]);
+            deviceHeading.setText(headingStrings.get(j));
 
             horizontalScrollView = (HorizontalScrollView) customBigButtonPanel.getChildAt(1);
             horizontalButtonLayout = (LinearLayout) horizontalScrollView.getChildAt(0);
             final int deviceNumber = j;
 
-            for (int i = 0; i < icons[j].length; i++) {
+            for (int i = 0; i < listOfAllDevices.get(j).size(); i++) {
                 FrameLayout custom = (FrameLayout) inflater.inflate(R.layout.pannel_single_button, null);
                 horizontalButtonLayout.addView(custom);
                 LinearLayout v=(LinearLayout) custom.getChildAt(0);
                 ImageView buttonImage =(ImageView) v.getChildAt(0);
-                buttonImage.setImageDrawable(getDrawable(icons[j][i]));
-
+                int resId = getResources().getIdentifier(((ProposalObject)listOfAllDevices.get(j).get(i)).getIcon(), "drawable", getPackageName());
+                buttonImage.setImageResource(resId);
                 TextView headingView =(TextView) v.getChildAt(1);
-                headingView.setText(strings[j][i]);
-
+                //headingView.setText(listOfAllDevices.get(j).);
                 final int actionNumber = i;
                 //SetText
 
                 custom.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //TODO Give data
                         Intent intent1 = new Intent(thisAktivity, DetailsView.class);
                         final int dNumber = deviceNumber;
                         final int aNumber = actionNumber;
+                        intent1.putExtra("deviceId",deviceId);
                         intent1.putExtra("deviceNumber", dNumber);
                         intent1.putExtra("actionNumber", aNumber);
                         intent1.putExtra("DeviceString", headingStrings);
                         intent1.putExtra("ActionStrings",strings[dNumber]);
                         intent1.putExtra("IconDrawable", icons[dNumber]);
-
                         startActivityForResult(intent1, 2);//TODO
                     }
                 });

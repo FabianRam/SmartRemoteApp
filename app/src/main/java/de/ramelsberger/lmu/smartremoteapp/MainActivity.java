@@ -28,6 +28,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,7 +41,10 @@ public class MainActivity extends AppCompatActivity {
     private static String LIGHT_COLOR = RED_COLOR;
 
 
-    private static ArrayList<ButtonObject> buttonObjects;
+    public static ArrayList<ButtonObject> buttonObjects;
+    public static ArrayList<DeviceObject> deviceObjects;
+    public static ArrayList<ProposalObject> proposals;
+
 
     private MainActivity thisActivity;
     private ButtonObject draggedButtonObject;
@@ -129,41 +133,15 @@ public class MainActivity extends AppCompatActivity {
     private class StartActionTouchListener implements View.OnTouchListener {//TODO give rigth information to the server
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
-            ImageButton button = (ImageButton) view;
-            int resourceName = button.getId();
-            switch (resourceName) {
-                case R.id.remote_button1:
-                    LIGHT_COLOR = RED_COLOR;
-                    break;
 
-                case R.id.remote_button2:
-                    LIGHT_COLOR = ORANGE_COLOR;
-                    break;
-
-                case R.id.remote_button3:
-                    LIGHT_COLOR = "#B23D2A";
-                    break;
-
-                case R.id.remote_button4:
-                    LIGHT_COLOR = BLUE_COLOR;
-                    break;
-
-                case R.id.remote_button5:
-                    LIGHT_COLOR = "#EFC94C";
-                    break;
-
-                case R.id.remote_button6:
-                    LIGHT_COLOR = "#42B264";
-                    break;
-
-                default:
-                    LIGHT_COLOR = ORANGE_COLOR;
-                    break;
-            }
-
-            mService.send("setLight", LIGHT_COLOR);
+            ButtonObject actionObject =null; //TODO getTouchedButton
+            //mService.send("storeAction", actionObject.toJSON());
             return false;
         }
+    }
+
+    public void storeAction(JSONObject jsonObject){//Send currently created button to server
+        mService.send("storeAction", jsonObject);
     }
 
     //------------------------------------------------ listeners
@@ -286,7 +264,25 @@ public class MainActivity extends AppCompatActivity {
 
                 @Override
                 public void onDevicesReceived(JSONArray jsonArray) {
-                    //auslassen da eh blos hue
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject jsonobject = null;
+                        try {
+                            jsonobject = jsonArray.getJSONObject(i);
+                            String id = (String) jsonobject.get("_id");
+                            String name = (String) jsonobject.get("name");
+                            String type = (String) jsonobject.get("type");
+                            DeviceObject deviceObject = new DeviceObject(id, name, type);
+                            if (jsonobject.has("subID")) {
+                                deviceObject.setSubID(jsonobject.getString("subID"));
+                            }
+                            deviceObjects.add(deviceObject);
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+
                 }
 
                 @Override
@@ -296,24 +292,62 @@ public class MainActivity extends AppCompatActivity {
                         JSONObject jsonobject = null;
                         try {
                             jsonobject = jsonArray.getJSONObject(i);
-                            int userId = (int)Math.random()*8;//TODO
-                            int deviceId = (int)Math.random()*3;//TODO
+                            String userId = jsonobject.getString("userID");//TestUser="1234abc"
+                            String deviceId = jsonobject.getString("deviceID");
                             String deviceName = jsonobject.getString("name");
                             String actionName = jsonobject.getString("beschreibung");
                             String iconBeschreibung = jsonobject.getString("icon");
                             int position = i;
-                            ButtonObject buttonObject = new ButtonObject(userId,deviceId,deviceName,actionName,iconBeschreibung,position);
+                            ButtonObject buttonObject = new ButtonObject(userId, deviceId, deviceName, actionName, iconBeschreibung, position);
                             buttonObjects.add(buttonObject);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-
                     }
+                }
 
 
+                @Override
+                public void onActionStored(JSONObject jsonObject) {//stored actions
+                    //TODO action with id
+                    try {
+                        String userId = jsonObject.getString("userID");
+                        String deviceId = jsonObject.getString("deviceID");
+                        String deviceName = jsonObject.getString("name");
+                        String actionName = jsonObject.getString("beschreibung");
+                        String iconBeschreibung = jsonObject.getString("icon");
+                        ButtonObject buttonObject = new ButtonObject(deviceId, deviceName, actionName, "Desc", iconBeschreibung, buttonObjects.size() + 1);
+                        buttonObjects.add(buttonObject);
+
+                        //upadte Fragments
+                        //...TODO
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onProposals(JSONArray jArray) {
+                    for (int i = 0; i < jArray.length(); i++) {
+                        JSONObject jsonobject = null;
+                        if(proposals==null)
+                            proposals= new ArrayList();
+                        try {
+                            jsonobject = jArray.getJSONObject(i);
+                            String porposalId = jsonobject.getString("_id");
+                            String name = jsonobject.getString("name");
+                            String type = jsonobject.getString("type");
+                            String icon = jsonobject.getString("icon");
+                            ProposalObject proposalObject = new ProposalObject(porposalId, name, type, icon);
+                            proposals.add(proposalObject);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
                 }
             });
             mBound = true;
         }
-    };
+    }
+            ;
 }

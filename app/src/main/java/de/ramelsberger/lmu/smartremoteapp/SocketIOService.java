@@ -10,6 +10,7 @@ import android.os.IBinder;
 import android.util.Log;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.net.URISyntaxException;
 
@@ -131,7 +132,7 @@ public class SocketIOService extends Service {
                 @Override
                 public void call(Object... args) {
                     JSONArray jArray = (JSONArray) args[0];
-                    if(mListener != null){
+                    if (mListener != null) {
                         mListener.onDevicesReceived(jArray);
                     }
                 }
@@ -147,14 +148,44 @@ public class SocketIOService extends Service {
                 }
             });
 
+            socket.on("storedAction", new Emitter.Listener() {
+
+                @Override
+                public void call(Object... args) {
+                    JSONObject jArray = (JSONObject) args[0];
+                    if(mListener != null){
+                        mListener.onActionStored(jArray);
+                    }
+                }
+            });
+
+            socket.on("proposals", new Emitter.Listener() {
+
+                @Override
+                public void call(Object... args) {
+                    JSONArray jArray = (JSONArray) args[0];
+                    if(mListener != null){
+                        mListener.onProposals(jArray);
+                    }
+                }
+            });
+
             socket.connect();
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
     }
 
-    public void send(String event, Object message){
+    public void send(String event, String message){
+        socket.emit(event,message);
+    }
 
+    public void send(String event, JSONArray message){
+        socket.emit(event,message);
+    }
+
+    public void send(String event, JSONObject message){
+        socket.emit(event,message);
     }
 
     public class SocketIOBinder extends Binder {
@@ -173,5 +204,7 @@ public class SocketIOService extends Service {
         public void onConnected();
         public void onDevicesReceived(JSONArray jsonArray);
         public void onActionsReceived(JSONArray jsonArray);
+        public void onActionStored(JSONObject jsonObject);
+        public void onProposals(JSONArray jArray);
     }
 }
