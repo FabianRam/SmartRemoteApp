@@ -22,7 +22,6 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            android:screenOrientation="portrait"
          </activity>
 
         <receiver android:name=".ButtonWidget" >
@@ -42,10 +41,7 @@
         </activity>
 
         <service
-            android:name="de.ramelsberger.lmu.smartremoteapp.SocketIOService"
-            android:enabled="false"
-            android:exported="false"
-            ></service>
+            android:name="de.ramelsberger.lmu.smartremoteapp.SocketIOService"/>
     </application>
 
 </manifest>

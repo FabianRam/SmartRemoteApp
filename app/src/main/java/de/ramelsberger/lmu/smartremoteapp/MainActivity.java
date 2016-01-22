@@ -76,8 +76,11 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
 
         //---------------------
+        Log.i("service", "create intent");
         Intent intent = new Intent(this, SocketIOService.class);
+        Log.i("service", "start intent service");
         startService(intent);
+        Log.i("service", "bind service");
         bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
     }
 

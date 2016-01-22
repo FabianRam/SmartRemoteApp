@@ -32,6 +32,12 @@ public class SocketIOService extends Service {
     private SocketIOBinder mBinder = new SocketIOBinder();
 
     public SocketIOService() {
+        Log.i("service", "created service");
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
         mNsdManager = (NsdManager) getSystemService(Context.NSD_SERVICE);
         initializeDiscoveryListener();
         mNsdManager.discoverServices("_http._tcp.", NsdManager.PROTOCOL_DNS_SD, mDiscoveryListener);
@@ -39,11 +45,13 @@ public class SocketIOService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        Log.i("service", "started service");
         return Service.START_NOT_STICKY;
     }
 
     @Override
     public IBinder onBind(Intent intent) {
+        Log.i("service", "bound service");
         return mBinder;
     }
 
