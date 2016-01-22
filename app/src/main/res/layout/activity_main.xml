@@ -16,6 +16,14 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:src="@drawable/logo_remote" />
+            <TextView
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="PEDRO"
+                android:textColor="@color/yellowBrown"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                />
             </android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>
