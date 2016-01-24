@@ -1,10 +1,9 @@
 package de.ramelsberger.lmu.smartremoteapp;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
 import android.net.nsd.NsdManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,12 +11,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.TextView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+
+import static de.ramelsberger.lmu.smartremoteapp.MainActivity.buttonObjects;
 
 //import info.androidhive.materialtabs.R;
 
@@ -25,7 +25,6 @@ import java.util.ArrayList;
 public class PageFragment extends Fragment {
 
     private static final int DEFAULT_PAGE = 0;
-    private static ArrayList<ButtonObject> buttonObjects;
 
     private MainActivity thisActivity;
     private ButtonObject draggedButtonObject;
@@ -78,7 +77,7 @@ public class PageFragment extends Fragment {
             JSONObject newButtonObject;
 
             try {
-                newButtonObject = new JSONObject(bundle.getString("newButtonObject"));
+                newButtonObject = new JSONObject(bundle.getString("newButtonJSON"));
                 ((MainActivity) getActivity()).storeAction(newButtonObject);
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -97,18 +96,21 @@ public class PageFragment extends Fragment {
             for(int j=0;j<buttonObjects.size();j++) {
                 if (buttonObjects.get(j).getButtonPosition() == i+6*fragmentId)
                 {
-                    Resources res = thisActivity.getResources();
+
+                    Context context = remoteButtons[i].getContext();
+                    Resources res = context.getResources();
+
                     String mDrawableName = buttonObjects.get(j).getIconDescription();
-                    int resID = res.getIdentifier(mDrawableName , "drawable", thisActivity.getPackageName());
-                    Drawable drawable = res.getDrawable(resID );
-                    remoteButtons[i].setImageDrawable(drawable);
+                    String separatedString = mDrawableName.substring (0, mDrawableName.lastIndexOf('.'));
+                    int resID = res.getIdentifier(separatedString, "drawable", context.getPackageName());
+                    remoteButtons[i].setImageResource(resID);
                 }
             }
             final int buttonPosition=i;
             remoteButtons[i].setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent1 = new Intent(thisActivity, ButtonChooser.class);
+                    Intent intent1 = new Intent(thisActivity, ButtonChooserAktivity.class);
                     intent1.putExtra("buttonPosition",buttonPosition);
                     intent1.putExtra("FragmentId",fragmentId);
                     startActivityForResult(intent1,1);

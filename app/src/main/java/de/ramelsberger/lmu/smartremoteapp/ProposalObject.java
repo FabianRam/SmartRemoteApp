@@ -5,16 +5,28 @@ package de.ramelsberger.lmu.smartremoteapp;
  */
 public class ProposalObject {
 
+
+
+    private String action;
     private String proposalID;
     private String name;
     private String type;
     private String icon;
 
-    public ProposalObject(String proposalID, String name, String type, String icon) {
+    public ProposalObject(String proposalID, String name, String type, String icon, String action) {
         this.proposalID = proposalID;
         this.name = name;
         this.type = type;
         this.icon = icon;
+        this.action =action;
+    }
+
+    public String getAction() {
+        return action;
+    }
+
+    public void setAction(String action){
+        this.action = action;
     }
 
     public String getProposalID() {

@@ -8,16 +8,18 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 public class SpinnerAdapter extends ArrayAdapter<String> {
-    String[] items;
-    int[] images;
+    ArrayList<String> items;
+    ArrayList<String> images;
     Context context;
     int rid;
     TextView textview;
     ImageView imageview;
     LayoutInflater inflater;
 
-    public SpinnerAdapter(Context context, int rid, String[] items,int[] images) {
+    public SpinnerAdapter(Context context, int rid, ArrayList<String> items,ArrayList<String> images) {
         super(context, rid, items);
         this.items = items;
         this.context = context;
@@ -30,8 +32,7 @@ public class SpinnerAdapter extends ArrayAdapter<String> {
     }
 
     public int getCount() {
-
-        return items.length;
+        return items.size();
     }
 
     @Override
@@ -52,8 +53,12 @@ public class SpinnerAdapter extends ArrayAdapter<String> {
                     .findViewById(R.id.spinneritem_txt);
             imageview = (ImageView) convertview
                     .findViewById(R.id.spinneritem_iv);
-            imageview.setBackgroundResource(images[position]);
-            textview.setText(items[position]);
+
+
+            String separatedString = images.get(position).substring(0, images.get(position).lastIndexOf('.'));
+            int resId = getContext().getResources().getIdentifier(separatedString, "drawable", getContext().getPackageName());
+            imageview.setBackgroundResource(resId);
+            textview.setText(items.get(position));
 
         }
 

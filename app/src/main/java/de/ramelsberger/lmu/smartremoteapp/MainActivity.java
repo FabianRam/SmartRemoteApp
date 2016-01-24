@@ -28,7 +28,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.AbstractList;
+import java.io.Console;
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -82,6 +83,44 @@ public class MainActivity extends AppCompatActivity {
         startService(intent);
         Log.i("service", "bind service");
         bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+
+        //--------------------- test method without server
+
+        buttonObjects = new ArrayList<>();
+
+        try {
+            String stringArray="[{\"_id\":\"irgubrkgb\",\"userID\":\"123abc\",\"device\":\"fsheufh\",\"subID\":0,\"name\":\"Red\",\"action\":\"turn bathroom-light red\",\"icon\":\"icon_lights_red.png\",\"proposal\":\"bsrgr8g\",\"__v\":0}]";
+            JSONArray reader = new JSONArray(stringArray);
+            Log.i("actionJsonArray %s", reader.toString());
+            onReceiveActions(reader);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+        deviceObjects = new ArrayList<>();
+
+        try {
+            String stringArray="[{\"_id\":\"fsheufh\",\"subID\":0,\"name\":\"bathroom-light\",\"type\":\"hue-light\"},{\"_id\":\"fsheufh\",\"subID\":1,\"name\":\"bedroom-light\",\"type\":\"hue-light\"}]\n";
+            JSONArray reader = new JSONArray(stringArray);
+            Log.i("actionJsonArray %s", reader.toString());
+            storeReceivedDevices(reader);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+        proposals = new ArrayList<>();
+
+        try {
+            String stringArray="[{\"_id\":\"bsrgr8g\",\"name\":\"Red\",\"type\":\"hue-light\",\"icon\":\"icon_lights_red.png\",\"action\":{\"rgb\":\"255,0,0\"},\"__v\":0},{\"_id\":\"kughsr4\",\"name\":\"Blue\",\"type\":\"hue-light\",\"icon\":\"icon_lights_blue.png\",\"action\":{\"rgb\":\"0,0,255\"},\"__v\":0},{\"_id\":\"izt498\",\"name\":\"Green\",\"type\":\"hue-light\",\"icon\":\"icon_lights_green.png\",\"action\":{\"rgb\":\"0,255,0\"},\"__v\":0}]";
+            JSONArray reader = new JSONArray(stringArray);
+            Log.i("actionJsonArray %s", reader.toString());
+            onStoreReceivedProposals(reader);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
     }
 
 
@@ -144,6 +183,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void storeAction(JSONObject jsonObject){//Send currently created button to server
+        if(mService!=null)
         mService.send("storeAction", jsonObject);
     }
 
@@ -267,46 +307,14 @@ public class MainActivity extends AppCompatActivity {
 
                 @Override
                 public void onDevicesReceived(JSONArray jsonArray) {
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        JSONObject jsonobject = null;
-                        try {
-                            jsonobject = jsonArray.getJSONObject(i);
-                            String id = (String) jsonobject.get("_id");
-                            String name = (String) jsonobject.get("name");
-                            String type = (String) jsonobject.get("type");
-                            DeviceObject deviceObject = new DeviceObject(id, name, type);
-                            if (jsonobject.has("subID")) {
-                                deviceObject.setSubID(jsonobject.getString("subID"));
-                            }
-                            deviceObjects.add(deviceObject);
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                    }
+                    storeReceivedDevices(jsonArray);
 
                 }
 
                 @Override
                 public void onActionsReceived(JSONArray jsonArray) {
                     //TODO rausparsen
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        JSONObject jsonobject = null;
-                        try {
-                            jsonobject = jsonArray.getJSONObject(i);
-                            String userId = jsonobject.getString("userID");//TestUser="1234abc"
-                            String deviceId = jsonobject.getString("deviceID");
-                            String deviceName = jsonobject.getString("name");
-                            String actionName = jsonobject.getString("beschreibung");
-                            String iconBeschreibung = jsonobject.getString("icon");
-                            int position = i;
-                            ButtonObject buttonObject = new ButtonObject(userId, deviceId, deviceName, actionName, iconBeschreibung, position);
-                            buttonObjects.add(buttonObject);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
+                    onReceiveActions(jsonArray);
                 }
 
 
@@ -331,26 +339,72 @@ public class MainActivity extends AppCompatActivity {
 
                 @Override
                 public void onProposals(JSONArray jArray) {
-                    for (int i = 0; i < jArray.length(); i++) {
-                        JSONObject jsonobject = null;
-                        if(proposals==null)
-                            proposals= new ArrayList();
-                        try {
-                            jsonobject = jArray.getJSONObject(i);
-                            String porposalId = jsonobject.getString("_id");
-                            String name = jsonobject.getString("name");
-                            String type = jsonobject.getString("type");
-                            String icon = jsonobject.getString("icon");
-                            ProposalObject proposalObject = new ProposalObject(porposalId, name, type, icon);
-                            proposals.add(proposalObject);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
+                    onStoreReceivedProposals(jArray);
                 }
             });
             mBound = true;
         }
     }
             ;
+
+    private void onStoreReceivedProposals(JSONArray jArray) {
+        for (int i = 0; i < jArray.length(); i++) {
+            JSONObject jsonobject = null;
+            if(proposals==null)
+                proposals= new ArrayList();
+            try {
+                jsonobject = jArray.getJSONObject(i);
+                String porposalId = jsonobject.getString("_id");
+                String name = jsonobject.getString("name");
+                String type = jsonobject.getString("type");
+                String icon = jsonobject.getString("icon");
+                String Receivedaction =jsonobject.getString("action");
+                ProposalObject proposalObject = new ProposalObject(porposalId, name, type, icon,Receivedaction);
+                proposals.add(proposalObject);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void storeReceivedDevices(JSONArray jsonArray) {
+        for (int i = 0; i < jsonArray.length(); i++) {
+            JSONObject jsonobject = null;
+            try {
+                jsonobject = jsonArray.getJSONObject(i);
+                String id = (String) jsonobject.get("_id");
+                String name = (String) jsonobject.get("name");
+                String type = (String) jsonobject.get("type");
+                DeviceObject deviceObject = new DeviceObject(id, name, type);
+                if (jsonobject.has("subID")) {
+                    deviceObject.setSubID(jsonobject.getString("subID"));
+                }
+                deviceObjects.add(deviceObject);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
+
+    private void onReceiveActions(JSONArray jsonArray) {
+        for (int i = 0; i < jsonArray.length(); i++) {
+            JSONObject jsonobject = null;
+            try {
+                jsonobject = jsonArray.getJSONObject(i);
+                String userId = jsonobject.getString("userID");//TestUser="1234abc"
+                String deviceId = jsonobject.getString("device");
+                String deviceName = jsonobject.getString("name");
+                String actionName = jsonobject.getString("action");
+                String iconBeschreibung = jsonobject.getString("icon");
+                int position = i;
+                ButtonObject buttonObject = new ButtonObject(userId, deviceId, deviceName, actionName, iconBeschreibung, position);
+                buttonObjects.add(buttonObject);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
 }

@@ -2,31 +2,28 @@ package de.ramelsberger.lmu.smartremoteapp;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
-import java.sql.Array;
 import java.util.ArrayList;
 
+import static de.ramelsberger.lmu.smartremoteapp.MainActivity.deviceObjects;
 import static de.ramelsberger.lmu.smartremoteapp.MainActivity.proposals;
 
-public class ButtonChooser extends AppCompatActivity {
+public class ButtonChooserAktivity extends AppCompatActivity {
 
     private LinearLayout linearLayoutDrawer;
     private HorizontalScrollView horizontalScrollView;
     private LinearLayout horizontalButtonLayout;
-    private ButtonChooser thisAktivity;
+    private ButtonChooserAktivity thisAktivity;
 
     public static int clickedPosition;
     public static int clickedFragmentID;
@@ -78,24 +75,23 @@ public class ButtonChooser extends AppCompatActivity {
         headingStrings=new ArrayList<>();
         deviceId= new ArrayList<>();
         ArrayList<ArrayList> listOfAllDevices=new ArrayList();
-        for(int i=0;i<headingStrings.size();i++) {
-            headingStrings.add(MainActivity.deviceObjects.get(i).getDeviceName());
-            for (int j=0;j<headingStrings.size();j++){
-                if(listOfAllDevices.get(i)==null) {
-                    ArrayList<ProposalObject> deviceActions = new ArrayList();
-                    listOfAllDevices.add(deviceActions);
-                }
-                if(headingStrings.get(i)==proposals.get(j).getType()){
-                    listOfAllDevices.get(i).add(proposals.get(i));
-                }
+        if(deviceObjects.size()>0)
+        for(int i=0;i<deviceObjects.size();i++) {
+            headingStrings.add(deviceObjects.get(i).getDeviceName());
+            //if (listOfAllDevices.get(i) == null) {
+                ArrayList<ProposalObject> deviceActions = new ArrayList();
+                listOfAllDevices.add(deviceActions);
+            //}
+            for (int j = 0; j < proposals.size(); j++) {
+
+                //if (headingStrings.get(i) == proposals.get(j).getType()) {//TODO
+                    listOfAllDevices.get(i).add(proposals.get(j));
+                //}
+
             }
-            deviceId.add(MainActivity.deviceObjects.get(i).getDeviceId());
         }
 
-
-
-
-        final int[][] icons={lightIcons,steroIcons};
+        //final int[][] icons={lightIcons,steroIcons};
         final String[][] strings ={lightIconString,steroStrings};
 
         if(getIntent().getExtras()!=null) {
@@ -119,12 +115,34 @@ public class ButtonChooser extends AppCompatActivity {
                 horizontalButtonLayout.addView(custom);
                 LinearLayout v=(LinearLayout) custom.getChildAt(0);
                 ImageView buttonImage =(ImageView) v.getChildAt(0);
-                int resId = getResources().getIdentifier(((ProposalObject)listOfAllDevices.get(j).get(i)).getIcon(), "drawable", getPackageName());
+
+                String fileName= ((ProposalObject)listOfAllDevices.get(j).get(i)).getIcon();
+                String separatedString = fileName.substring(0, fileName.lastIndexOf('.'));
+                int resId = getResources().getIdentifier(separatedString, "drawable", getPackageName());
                 buttonImage.setImageResource(resId);
+
                 TextView headingView =(TextView) v.getChildAt(1);
-                //headingView.setText(listOfAllDevices.get(j).);
+
+                ProposalObject proposalObject=((ProposalObject) listOfAllDevices.get(j).get(i));
+
+
+                headingView.setText(proposalObject.getName());
+
+                TextView detailView =(TextView) v.getChildAt(2);
+
+                detailView.setText(proposalObject.getAction());
+
                 final int actionNumber = i;
                 //SetText
+                final ArrayList<String> proposalActions=new ArrayList<String>();
+                for (int p=0;p<proposals.size();p++) {
+                    proposalActions.add(proposals.get(p).getName() + " " + proposals.get(p).getAction());
+                }
+
+                final ArrayList<String> icons=new ArrayList<String>();
+                for (int p=0;p<proposals.size();p++) {
+                    icons.add(proposals.get(p).getIcon());
+                }
 
                 custom.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -136,8 +154,8 @@ public class ButtonChooser extends AppCompatActivity {
                         intent1.putExtra("deviceNumber", dNumber);
                         intent1.putExtra("actionNumber", aNumber);
                         intent1.putExtra("DeviceString", headingStrings);
-                        intent1.putExtra("ActionStrings",strings[dNumber]);
-                        intent1.putExtra("IconDrawable", icons[dNumber]);
+                        intent1.putExtra("ActionStrings",proposalActions);
+                        intent1.putExtra("IconDrawable", icons);
                         startActivityForResult(intent1, 2);//TODO
                     }
                 });

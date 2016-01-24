@@ -10,7 +10,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -36,12 +35,12 @@ public class DetailsView extends Activity {
     private Spinner deviceSpinner;
     private Spinner deviceActionSpinner;
 
-    private String[] deviceString;
+    private ArrayList<String> deviceString;
     public static int maxPos=0;
-    private String[] actionArray;
+    private ArrayList<String> actionArray;
 
     //-----------------
-    private int[] icons;
+    private ArrayList<String> icons;
     private int actionNumber;
     private int deviceNumber;
     private String actionDescription="";//TODO
@@ -64,16 +63,18 @@ public class DetailsView extends Activity {
         iconSpinner.setAdapter(adapter);
         iconSpinner.setSelection(actionNumber);
 
-        iconView.setImageResource(icons[actionNumber]);
+        String separatedString = icons.get(actionNumber).substring(0, icons.get(actionNumber).lastIndexOf('.'));
+        int resId = getResources().getIdentifier(separatedString, "drawable", getPackageName());
+        iconView.setImageResource(resId);
 
         ArrayList<String> positions=new ArrayList<String>();
-        for (int i =0;i<(ButtonChooser.clickedFragmentID+1)*6;i++){
+        for (int i =0;i<(ButtonChooserAktivity.clickedFragmentID+1)*6;i++){
             positions.add("Position "+(i+1)+" Page "+(i/6+1));
         }
 
         ArrayAdapter textAdapter = new ArrayAdapter(this, R.layout.simple_spinner_layout, positions);
         buttonPositionSpinner.setAdapter(textAdapter);
-        buttonPositionSpinner.setSelection(ButtonChooser.clickedPosition + ButtonChooser.clickedFragmentID * 6);
+        buttonPositionSpinner.setSelection(ButtonChooserAktivity.clickedPosition + ButtonChooserAktivity.clickedFragmentID * 6);
 
 
         ArrayAdapter deviceTextAdapter = new ArrayAdapter(this, R.layout.simple_spinner_layout, deviceString);
@@ -94,7 +95,7 @@ public class DetailsView extends Activity {
     private void initializeListener() {
         backButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent1 = new Intent(thisActivity, ButtonChooser.class);
+                Intent intent1 = new Intent(thisActivity, ButtonChooserAktivity.class);
                 setResult(3);
                 finish();
 
@@ -103,8 +104,8 @@ public class DetailsView extends Activity {
 
         acceptButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                ButtonObject buttonObject = new ButtonObject(deviceID,deviceString[deviceNumber],actionArray[actionNumber],actionDescription,//
-                        getResources().getResourceName(icons[actionNumber]), selectedPosition);
+                ButtonObject buttonObject = new ButtonObject(deviceID,deviceString.get(deviceNumber),actionArray.get(actionNumber),actionDescription,//
+                       icons.get(actionNumber), selectedPosition);
                 //Convert object to JSON in Android
                 JSONObject jsonButton = buttonObject.toJSON();
 
@@ -116,7 +117,7 @@ public class DetailsView extends Activity {
                 } else {
                     b = new Bundle();
                 }
-                //b.putSerializable("newButtonObject", buttonObject);//ButtonObject wich contains all important information about the button
+                b.putSerializable("newButtonObject", buttonObject);//ButtonObject wich contains all important information about the button
                 b.putString("newButtonJSON",jsonButton.toString());
                 //TODO remove putSerialize?
 
@@ -126,7 +127,7 @@ public class DetailsView extends Activity {
                     maxPos = highestPosition;
                 }
                 intent1.putExtras(b);
-                if(ButtonChooser.clickedFragmentID!=0)//because of default page
+                if(ButtonChooserAktivity.clickedFragmentID!=0)//because of default page
                   lastAddedPosition++;
                 startActivity(intent1);//TODO for result
             }
@@ -136,7 +137,10 @@ public class DetailsView extends Activity {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 currentProductImage = iconSpinner.getSelectedItemPosition();
-                iconView.setImageResource(icons[currentProductImage]);
+
+                String separatedString = icons.get(currentProductImage).substring(0, icons.get(currentProductImage).lastIndexOf('.'));
+                int resId = getResources().getIdentifier(separatedString, "drawable", getPackageName());
+                iconView.setImageResource(resId);
             }
 
             @Override
@@ -164,11 +168,11 @@ public class DetailsView extends Activity {
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             deviceID = extras.getString("deviceId");
-            deviceString = extras.getStringArray("DeviceString");
-            actionArray = extras.getStringArray("ActionStrings");
+            deviceString = extras.getStringArrayList("DeviceString");
+            actionArray = extras.getStringArrayList("ActionStrings");
             deviceNumber = extras.getInt("deviceNumber");
             actionNumber = extras.getInt("actionNumber");
-            icons = (int[])extras.get("IconDrawable");
+            icons = extras.getStringArrayList("IconDrawable");
         }
     }
 
