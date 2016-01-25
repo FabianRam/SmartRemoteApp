@@ -84,9 +84,9 @@ public class ButtonChooserAktivity extends AppCompatActivity {
             //}
             for (int j = 0; j < proposals.size(); j++) {
 
-                //if (headingStrings.get(i) == proposals.get(j).getType()) {//TODO
+                if (deviceObjects.get(i).getDeviceType() == proposals.get(j).getType()) {//TODO
                     listOfAllDevices.get(i).add(proposals.get(j));
-                //}
+                }
 
             }
         }
