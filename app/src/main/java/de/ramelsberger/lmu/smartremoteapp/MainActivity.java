@@ -86,6 +86,11 @@ public class MainActivity extends AppCompatActivity {
 
         //--------------------- test method without server
 
+        testWithoutServer();
+
+    }
+
+    private void testWithoutServer() {
         buttonObjects = new ArrayList<>();
 
         try {
@@ -120,7 +125,6 @@ public class MainActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
     }
 
 
