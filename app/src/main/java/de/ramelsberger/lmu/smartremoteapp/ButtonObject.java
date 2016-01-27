@@ -7,6 +7,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
+import java.util.Random;
 
 /**
  * Created by Fabian on 13.11.2015.
@@ -20,6 +21,9 @@ public class ButtonObject implements Serializable {
     private static final String JSON_ACTION = "action";
     private static final String JSON_ICON = "icon";
     private static final String JSON_PROPOSAL_ID = "proposal";
+    private static final int MAX_LENGTH = 8;
+    private final String proposalId;
+    private final String deviceName;
 
     private String userID;
     private String deviceID;
@@ -36,30 +40,47 @@ public class ButtonObject implements Serializable {
 
 
     //Constructor withoud device and action id
-    public ButtonObject(String deviceID,String deviceName, String actionName, String actionDescription, String iconDescription,int buttonPosition) {
+    public ButtonObject(String userId, String deviceID, String deviceName, String actionName, String actionDescription, String iconDescription, int buttonPosition, String proposalId) {
+        this.userID=userId;
+        this.deviceID=deviceID;
+        this.deviceName=deviceName;
         this.actionDescription=actionDescription;
         this.actionName = actionName;
         this.iconDescription = iconDescription;
         this.buttonPosition=buttonPosition;
+        this.proposalId=proposalId;
 
     }
 
     public JSONObject toJSON(){
         JSONObject jsonObject= new JSONObject();
         try {
+            jsonObject.put("_id",randomString());
             jsonObject.put(JSON_USER_ID,userID);
             jsonObject.put(JSON_DEVICE_ID, deviceID);
             jsonObject.put(JSON_NAME, actionName);
             jsonObject.put(JSON_DEVICE_SUB_ID, deviceSubID);
             jsonObject.put(JSON_ICON, iconDescription);
             jsonObject.put(JSON_ACTION, actionDescription);
-            jsonObject.put(JSON_PROPOSAL_ID, actionObject);
+            jsonObject.put(JSON_PROPOSAL_ID, proposalId);
             return jsonObject;
         } catch (JSONException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
             return jsonObject;
         }
+    }
+
+    public static String randomString() {
+        Random generator = new Random();
+        StringBuilder randomStringBuilder = new StringBuilder();
+        int randomLength = generator.nextInt(MAX_LENGTH);
+        char tempChar;
+        for (int i = 0; i < randomLength; i++){
+            tempChar = (char) (generator.nextInt(96) + 32);
+            randomStringBuilder.append(tempChar);
+        }
+        return randomStringBuilder.toString();
     }
 
 

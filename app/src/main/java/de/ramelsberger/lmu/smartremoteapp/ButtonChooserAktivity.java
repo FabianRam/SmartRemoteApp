@@ -29,6 +29,8 @@ public class ButtonChooserAktivity extends AppCompatActivity {
     public static int clickedFragmentID;
     private ArrayList<String> headingStrings;
     private ArrayList<String> deviceId;
+    private ArrayList<String> proposalNames;
+    private String userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,23 +75,24 @@ public class ButtonChooserAktivity extends AppCompatActivity {
 
         //----------------------------------------------headings //initialize variables
         headingStrings=new ArrayList<>();
+        proposalNames=new ArrayList<>();
         deviceId= new ArrayList<>();
-        ArrayList<ArrayList> listOfAllDevices=new ArrayList();
-        if(deviceObjects.size()>0)
+        final ArrayList<ArrayList> listOfAllDevices=new ArrayList();
+        if(deviceObjects!=null&&deviceObjects.size()>0)
         for(int i=0;i<deviceObjects.size();i++) {
             headingStrings.add(deviceObjects.get(i).getDeviceName());
             //if (listOfAllDevices.get(i) == null) {
                 ArrayList<ProposalObject> deviceActions = new ArrayList();
                 listOfAllDevices.add(deviceActions);
             //}
+
+            if(proposals!=null)
             for (int j = 0; j < proposals.size(); j++) {
                 if (deviceObjects.get(i).getDeviceType().equals(proposals.get(j).getType())) {//TODO
                     listOfAllDevices.get(i).add(proposals.get(j));
                 }
-
             }
         }
-
         //final int[][] icons={lightIcons,steroIcons};
         final String[][] strings ={lightIconString,steroStrings};
 
@@ -135,7 +138,8 @@ public class ButtonChooserAktivity extends AppCompatActivity {
                 //SetText
                 final ArrayList<String> proposalActions=new ArrayList<String>();
                 for (int p=0;p<proposals.size();p++) {
-                    proposalActions.add(proposals.get(p).getName() + " " + proposals.get(p).getAction());
+                    proposalNames.add(proposals.get(p).getName());
+                    proposalActions.add(proposals.get(p).getName()+" :: "+ proposals.get(p).getType());
                 }
 
                 final ArrayList<String> icons=new ArrayList<String>();
@@ -149,13 +153,16 @@ public class ButtonChooserAktivity extends AppCompatActivity {
                         Intent intent1 = new Intent(thisAktivity, DetailsView.class);
                         final int dNumber = deviceNumber;
                         final int aNumber = actionNumber;
-                        intent1.putExtra("deviceId",deviceId);
+                        intent1.putExtra("UserId",userId);
+                        intent1.putExtra("deviceId",deviceObjects.get(deviceNumber).getDeviceId());
                         intent1.putExtra("deviceNumber", dNumber);
                         intent1.putExtra("actionNumber", aNumber);
+                        intent1.putExtra("actionNames",proposalNames);
                         intent1.putExtra("DeviceString", headingStrings);
                         intent1.putExtra("ActionStrings",proposalActions);
                         intent1.putExtra("IconDrawable", icons);
-                        startActivityForResult(intent1, 2);//TODO
+                        intent1.putExtra("proposalId", ((ProposalObject) listOfAllDevices.get(deviceNumber).get(aNumber)).getProposalID());
+                                startActivityForResult(intent1, 2);//TODO
                     }
                 });
             }

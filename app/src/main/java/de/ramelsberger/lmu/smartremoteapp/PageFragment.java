@@ -34,7 +34,10 @@ public class PageFragment extends Fragment {
     private NsdManager.DiscoveryListener mDiscoveryListener;
 
     private int fragmentId;
-
+    private int[] remoteButtonsId = {R.id.remote_button1, R.id.remote_button2, R.id.remote_button3,
+            R.id.remote_button4, R.id.remote_button5, R.id.remote_button6};;
+    private ImageButton[] remoteButtons = new ImageButton[6];
+    private View thisFragment;
 
     public PageFragment() {
         // Required empty public constructor
@@ -51,17 +54,12 @@ public class PageFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-
-
         //TODO
         // Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         //setSupportActionBar(toolbar);
-        View thisFragment = inflater.inflate(R.layout.fragment_button_page, container, false);
 
-        int[] remoteButtonsId = {R.id.remote_button1, R.id.remote_button2, R.id.remote_button3,
-                R.id.remote_button4, R.id.remote_button5, R.id.remote_button6};
-        ImageButton[] remoteButtons = new ImageButton[6];
 
+        thisFragment = inflater.inflate(R.layout.fragment_button_page, container, false);
         thisActivity = (MainActivity) getActivity();
         Bundle bundle = thisActivity.getIntent().getExtras();
 
@@ -87,25 +85,31 @@ public class PageFragment extends Fragment {
             //buttonObjects.add(newButtonObject);
 
         }
+        onUpdateButtons();
 
+
+
+
+        return thisFragment;
+    }
+
+    void onUpdateButtons() {
         for (int i = 0; i < remoteButtonsId.length; i++) {
 
             remoteButtons[i] = (ImageButton) thisFragment.findViewById(remoteButtonsId[i]);
 
             if(buttonObjects!=null)
-            for(int j=0;j<buttonObjects.size();j++) {
-                if (buttonObjects.get(j).getButtonPosition() == i+6*fragmentId)
-                {
-
-                    Context context = remoteButtons[i].getContext();
-                    Resources res = context.getResources();
-
-                    String mDrawableName = buttonObjects.get(j).getIconDescription();
-                    String separatedString = mDrawableName.substring (0, mDrawableName.lastIndexOf('.'));
-                    int resID = res.getIdentifier(separatedString, "drawable", context.getPackageName());
-                    remoteButtons[i].setImageResource(resID);
+                for(int j=0;j<buttonObjects.size();j++) {
+                    if (buttonObjects.get(j).getButtonPosition() == i+6*fragmentId)
+                    {
+                        Context context = remoteButtons[i].getContext();
+                        Resources res = context.getResources();
+                        String mDrawableName = buttonObjects.get(j).getIconDescription();
+                        String separatedString = mDrawableName.substring (0, mDrawableName.lastIndexOf('.'));
+                        int resID = res.getIdentifier(separatedString, "drawable", context.getPackageName());
+                        remoteButtons[i].setImageResource(resID);
+                    }
                 }
-            }
             final int buttonPosition=i;
             remoteButtons[i].setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -117,8 +121,8 @@ public class PageFragment extends Fragment {
                 }
             });
         }
-        return thisFragment;
     }
+
 
     public void setFragmentId(int id) {
         fragmentId = id;

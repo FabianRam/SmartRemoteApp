@@ -45,6 +45,9 @@ public class DetailsView extends Activity {
     private int deviceNumber;
     private String actionDescription="";//TODO
     private String deviceID;
+    private String proposalId;
+    private ArrayList<String> actionNames;
+    private String userId;
 
 
     @Override
@@ -59,7 +62,7 @@ public class DetailsView extends Activity {
         initializeListener();
 
         //Setup the image spinner
-        ArrayAdapter adapter = new SpinnerAdapter(this, R.layout.simple_image_spinner_layout, actionArray, icons);
+        ArrayAdapter adapter = new SpinnerAdapter(this, R.layout.simple_image_spinner_layout, actionNames, icons);
         iconSpinner.setAdapter(adapter);
         iconSpinner.setSelection(actionNumber);
 
@@ -103,9 +106,9 @@ public class DetailsView extends Activity {
         });
 
         acceptButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                ButtonObject buttonObject = new ButtonObject(deviceID,deviceString.get(deviceNumber),actionArray.get(actionNumber),actionDescription,//
-                       icons.get(actionNumber), selectedPosition);
+            public void onClick(View v) {//TODO
+                ButtonObject buttonObject = new ButtonObject("0",deviceID,deviceString.get(deviceNumber),actionNames.get(actionNumber),actionArray.get(actionNumber),//
+                       icons.get(actionNumber), selectedPosition,proposalId);
                 //Convert object to JSON in Android
                 JSONObject jsonButton = buttonObject.toJSON();
 
@@ -168,11 +171,14 @@ public class DetailsView extends Activity {
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             deviceID = extras.getString("deviceId");
+            actionNames = extras.getStringArrayList("actionNames");
             deviceString = extras.getStringArrayList("DeviceString");
             actionArray = extras.getStringArrayList("ActionStrings");
             deviceNumber = extras.getInt("deviceNumber");
             actionNumber = extras.getInt("actionNumber");
             icons = extras.getStringArrayList("IconDrawable");
+            proposalId = extras.getString("proposalId");
+            userId=extras.getString("UserId");
         }
     }
 

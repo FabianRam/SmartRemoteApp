@@ -28,8 +28,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.Console;
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,12 +49,13 @@ public class MainActivity extends AppCompatActivity {
     private ButtonObject draggedButtonObject;
     ImageButton[] imageButtons;
 
-    private SocketIOService mService;
+    private static SocketIOService mService;
     private boolean mBound;
 
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
+    private ArrayList<PageFragment> fragmentList;
 
 
     @Override
@@ -72,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         thisActivity=this;
         viewPager = (ViewPager) findViewById(R.id.viewpager);
-        setupViewPager(viewPager);
+        setupViewPager();
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
 
@@ -86,7 +85,8 @@ public class MainActivity extends AppCompatActivity {
 
         //--------------------- test method without server
 
-        testWithoutServer();
+        //testWithoutServer();
+
 
     }
 
@@ -171,12 +171,11 @@ public class MainActivity extends AppCompatActivity {
             View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(view);
             view.startDrag(data, shadowBuilder, view, 0);
             view.setVisibility(View.INVISIBLE);
-
             return false;
         }
     }
 
-    private class StartActionTouchListener implements View.OnTouchListener {//TODO give rigth information to the server
+    private class StartActionTouchListener implements View.OnTouchListener {//TODO give right information to the server
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
 
@@ -187,8 +186,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void storeAction(JSONObject jsonObject){//Send currently created button to server
-        if(mService!=null)
+       // if(mService!=null)
         mService.send("storeAction", jsonObject);
+
+        mService.send("getActions","0");
     }
 
     //------------------------------------------------ listeners
@@ -243,19 +244,23 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void setupViewPager(ViewPager viewPager) {
+    private void setupViewPager() {
         int amountOfPages=DetailsView.lastAddedPosition/6+1;//because of the default view
-
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         PageFragment defaultFragment = new PageFragment();
         adapter.addFrag(defaultFragment, "Default Page");
         defaultFragment.setFragmentId(0);
+        if(fragmentList==null)
+            fragmentList = new ArrayList<PageFragment>();
+        fragmentList.add(defaultFragment);
 
         for (int i =0;i<amountOfPages;i++) {
             if(DetailsView.maxPos%6==0) {//do not create a new page when the default page if full
                 PageFragment oneFragment = new PageFragment();
-                oneFragment.setFragmentId((i+1));//i +1 because of the default page
-                adapter.addFrag(oneFragment, "Page " + (i+1));
+                oneFragment.setFragmentId((i + 1));//i +1 because of the default page
+                adapter.addFrag(oneFragment, "Page " + (i + 1));
+
+                fragmentList.add(oneFragment);
             }
         }
         viewPager.setAdapter(adapter);
@@ -303,47 +308,72 @@ public class MainActivity extends AppCompatActivity {
             // We've bound to LocalService, cast the IBinder and get LocalService instance
             SocketIOService.SocketIOBinder binder = (SocketIOService.SocketIOBinder) service;
             mService = binder.getService();
+
+
             binder.setListener(new SocketIOService.SocketIOListener() {
                 @Override
-                public void onConnected() {
-                    onInitializeButtonListeners();
+                public void onConnected(){
+                    //onInitializeButtonListeners();
+                    mService.send("getActions","0");
+                    mService.send("getProposals");
                 }
 
                 @Override
-                public void onDevicesReceived(JSONArray jsonArray) {
-                    storeReceivedDevices(jsonArray);
+                public void onDevicesReceived(final JSONArray jsonArray) {
+                    MainActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            storeReceivedDevices(jsonArray);
+                        }
+                    });
 
                 }
 
                 @Override
-                public void onActionsReceived(JSONArray jsonArray) {
-                    //TODO rausparsen
-                    onReceiveActions(jsonArray);
+                public void onActionsReceived(final JSONArray jsonArray) {
+                    MainActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            onReceiveActions(jsonArray);
+                        }
+                    });
                 }
 
 
                 @Override
-                public void onActionStored(JSONObject jsonObject) {//stored actions
+                public void onActionStored(final JSONObject jsonObject) {//stored actions
                     //TODO action with id
-                    try {
-                        String userId = jsonObject.getString("userID");
-                        String deviceId = jsonObject.getString("deviceID");
-                        String deviceName = jsonObject.getString("name");
-                        String actionName = jsonObject.getString("beschreibung");
-                        String iconBeschreibung = jsonObject.getString("icon");
-                        ButtonObject buttonObject = new ButtonObject(deviceId, deviceName, actionName, "Desc", iconBeschreibung, buttonObjects.size() + 1);
-                        buttonObjects.add(buttonObject);
+                    MainActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                String userId = jsonObject.getString("userID");
+                                String deviceId = jsonObject.getString("deviceID");
+                                String deviceName = jsonObject.getString("name");
+                                String actionName = jsonObject.getString("beschreibung");
+                                String iconBeschreibung = jsonObject.getString("icon");
+                                String proposalId= jsonObject.getString("proposal");
+                                ButtonObject buttonObject = new ButtonObject(userId,deviceId, deviceName, actionName, "Desc", iconBeschreibung, buttonObjects.size() + 1,proposalId);
+                                buttonObjects.add(buttonObject);
 
-                        //upadte Fragments
-                        //...TODO
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                                //upadte Fragments
+                                //...TODO
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
                 }
 
                 @Override
-                public void onProposals(JSONArray jArray) {
-                    onStoreReceivedProposals(jArray);
+                public void onProposals(final JSONArray jArray) {
+                    MainActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            onStoreReceivedProposals(jArray);
+                        }
+                    });
+
                 }
             });
             mBound = true;
@@ -352,10 +382,9 @@ public class MainActivity extends AppCompatActivity {
             ;
 
     private void onStoreReceivedProposals(JSONArray jArray) {
+        proposals= new ArrayList<ProposalObject>();
         for (int i = 0; i < jArray.length(); i++) {
             JSONObject jsonobject = null;
-            if(proposals==null)
-                proposals= new ArrayList();
             try {
                 jsonobject = jArray.getJSONObject(i);
                 String porposalId = jsonobject.getString("_id");
@@ -372,6 +401,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void storeReceivedDevices(JSONArray jsonArray) {
+        deviceObjects= new ArrayList<DeviceObject>();
         for (int i = 0; i < jsonArray.length(); i++) {
             JSONObject jsonobject = null;
             try {
@@ -393,6 +423,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void onReceiveActions(JSONArray jsonArray) {
+        buttonObjects=new ArrayList<ButtonObject>();
         for (int i = 0; i < jsonArray.length(); i++) {
             JSONObject jsonobject = null;
             try {
@@ -402,13 +433,15 @@ public class MainActivity extends AppCompatActivity {
                 String deviceName = jsonobject.getString("name");
                 String actionName = jsonobject.getString("action");
                 String iconBeschreibung = jsonobject.getString("icon");
+                String proposalId = jsonobject.getString("proposal");
                 int position = i;
-                ButtonObject buttonObject = new ButtonObject(userId, deviceId, deviceName, actionName, iconBeschreibung, position);
+                ButtonObject buttonObject = new ButtonObject(userId, userId, deviceId, deviceName, actionName, iconBeschreibung, position,proposalId);
                 buttonObjects.add(buttonObject);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
-
+        for(int i=0;i<fragmentList.size();i++)
+            fragmentList.get(i).onUpdateButtons();
     }
 }

@@ -53,14 +53,6 @@
                 android:background="@color/orange"
                 android:textColor="@color/white" />
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:text="Last Added"
-                android:id="@+id/button2"
-                android:layout_weight="1"
-                android:background="@color/brighterBlue"
-                android:textColor="@color/white" />
         </LinearLayout>
 
         <ImageView

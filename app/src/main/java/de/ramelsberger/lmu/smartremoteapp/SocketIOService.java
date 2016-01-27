@@ -196,6 +196,8 @@ public class SocketIOService extends Service {
         socket.emit(event,message);
     }
 
+    public void send(String event){socket.emit(event);}
+
     public class SocketIOBinder extends Binder {
 
         public SocketIOService getService() {
