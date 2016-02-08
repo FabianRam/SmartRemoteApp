@@ -35,7 +35,7 @@ public class PageFragment extends Fragment {
 
     private int fragmentId;
     private int[] remoteButtonsId = {R.id.remote_button1, R.id.remote_button2, R.id.remote_button3,
-            R.id.remote_button4, R.id.remote_button5, R.id.remote_button6};;
+            R.id.remote_button4, R.id.remote_button5, R.id.remote_button6};
     private ImageButton[] remoteButtons = new ImageButton[6];
     private View thisFragment;
 
@@ -114,6 +114,9 @@ public class PageFragment extends Fragment {
             remoteButtons[i].setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    if(thisActivity.getService()==null) {
+                        thisActivity.testWithoutServer();
+                    }
                     Intent intent1 = new Intent(thisActivity, ButtonChooserAktivity.class);
                     intent1.putExtra("buttonPosition",buttonPosition);
                     intent1.putExtra("FragmentId",fragmentId);

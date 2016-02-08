@@ -62,7 +62,7 @@ public class DetailsView extends Activity {
         initializeListener();
 
         //Setup the image spinner
-        ArrayAdapter adapter = new SpinnerAdapter(this, R.layout.simple_image_spinner_layout, actionNames, icons);
+        ArrayAdapter<String> adapter = new SpinnerAdapter(this, R.layout.simple_image_spinner_layout, actionNames, icons);
         iconSpinner.setAdapter(adapter);
         iconSpinner.setSelection(actionNumber);
 
@@ -70,22 +70,22 @@ public class DetailsView extends Activity {
         int resId = getResources().getIdentifier(separatedString, "drawable", getPackageName());
         iconView.setImageResource(resId);
 
-        ArrayList<String> positions=new ArrayList<String>();
+        ArrayList<String> positions=new ArrayList<>();
         for (int i =0;i<(ButtonChooserAktivity.clickedFragmentID+1)*6;i++){
             positions.add("Position "+(i+1)+" Page "+(i/6+1));
         }
 
-        ArrayAdapter textAdapter = new ArrayAdapter(this, R.layout.simple_spinner_layout, positions);
+        ArrayAdapter<String> textAdapter = new ArrayAdapter<String>(this, R.layout.simple_spinner_layout, positions);
         buttonPositionSpinner.setAdapter(textAdapter);
         buttonPositionSpinner.setSelection(ButtonChooserAktivity.clickedPosition + ButtonChooserAktivity.clickedFragmentID * 6);
 
 
-        ArrayAdapter deviceTextAdapter = new ArrayAdapter(this, R.layout.simple_spinner_layout, deviceString);
+        ArrayAdapter<String> deviceTextAdapter = new ArrayAdapter<String>(this, R.layout.simple_spinner_layout, deviceString);
         deviceSpinner = (Spinner) thisActivity.findViewById(R.id.deviceSpinner);
         deviceSpinner.setAdapter(deviceTextAdapter);
         deviceSpinner.setSelection(deviceNumber);
 
-        ArrayAdapter actionTextAdapter = new ArrayAdapter(this, R.layout.simple_spinner_layout, actionArray);
+        ArrayAdapter<String> actionTextAdapter = new ArrayAdapter<String>(this, R.layout.simple_spinner_layout, actionArray);
 
         deviceActionSpinner = (Spinner) thisActivity.findViewById(R.id.deviceActionSpinner);
         deviceActionSpinner.setAdapter(actionTextAdapter);
@@ -107,7 +107,7 @@ public class DetailsView extends Activity {
 
         acceptButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {//TODO
-                ButtonObject buttonObject = new ButtonObject("0",deviceID,deviceString.get(deviceNumber),actionNames.get(actionNumber),actionArray.get(actionNumber),//
+                ButtonObject buttonObject = new ButtonObject("1",deviceID,deviceString.get(deviceNumber),actionNames.get(actionNumber),actionArray.get(actionNumber),//
                        icons.get(actionNumber), selectedPosition,proposalId);
                 //Convert object to JSON in Android
                 JSONObject jsonButton = buttonObject.toJSON();

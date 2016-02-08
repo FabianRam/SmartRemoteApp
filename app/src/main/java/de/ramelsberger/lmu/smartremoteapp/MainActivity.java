@@ -58,8 +58,10 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<PageFragment> fragmentList;
 
 
+
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected  void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
@@ -90,42 +92,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void testWithoutServer() {
-        buttonObjects = new ArrayList<>();
 
-        try {
-            String stringArray="[{\"_id\":\"irgubrkgb\",\"userID\":\"123abc\",\"device\":\"fsheufh\",\"subID\":0,\"name\":\"Red\",\"action\":\"turn bathroom-light red\",\"icon\":\"icon_lights_red.png\",\"proposal\":\"bsrgr8g\",\"__v\":0}]";
-            JSONArray reader = new JSONArray(stringArray);
-            Log.i("actionJsonArray %s", reader.toString());
-            onReceiveActions(reader);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-
-        deviceObjects = new ArrayList<>();
-
-        try {
-            String stringArray="[{\"_id\":\"fsheufh\",\"subID\":0,\"name\":\"bathroom-light\",\"type\":\"hue-light\"},{\"_id\":\"fsheufh\",\"subID\":1,\"name\":\"bedroom-light\",\"type\":\"hue-light\"}]\n";
-            JSONArray reader = new JSONArray(stringArray);
-            Log.i("actionJsonArray %s", reader.toString());
-            storeReceivedDevices(reader);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-
-        proposals = new ArrayList<>();
-
-        try {
-            String stringArray="[{\"_id\":\"bsrgr8g\",\"name\":\"Red\",\"type\":\"hue-light\",\"icon\":\"icon_lights_red.png\",\"action\":{\"rgb\":\"255,0,0\"},\"__v\":0},{\"_id\":\"kughsr4\",\"name\":\"Blue\",\"type\":\"hue-light\",\"icon\":\"icon_lights_blue.png\",\"action\":{\"rgb\":\"0,0,255\"},\"__v\":0},{\"_id\":\"izt498\",\"name\":\"Green\",\"type\":\"hue-light\",\"icon\":\"icon_lights_green.png\",\"action\":{\"rgb\":\"0,255,0\"},\"__v\":0}]";
-            JSONArray reader = new JSONArray(stringArray);
-            Log.i("actionJsonArray %s", reader.toString());
-            onStoreReceivedProposals(reader);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
 
 
     @Override
@@ -175,21 +142,22 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private class StartActionTouchListener implements View.OnTouchListener {//TODO give right information to the server
+    private class StartActionTouchListener implements View.OnTouchListener {
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
 
-            ButtonObject actionObject =null; //TODO getTouchedButton
+            ButtonObject actionObject =null;
             //mService.send("storeAction", actionObject.toJSON());
             return false;
         }
     }
 
     public void storeAction(JSONObject jsonObject){//Send currently created button to server
-       // if(mService!=null)
-        mService.send("storeAction", jsonObject);
+     if(mService!=null) {
+         mService.send("storeAction", jsonObject);
+         mService.send("getActions", "1");
+     }
 
-        mService.send("getActions","0");
     }
 
     //------------------------------------------------ listeners
@@ -251,7 +219,7 @@ public class MainActivity extends AppCompatActivity {
         adapter.addFrag(defaultFragment, "Default Page");
         defaultFragment.setFragmentId(0);
         if(fragmentList==null)
-            fragmentList = new ArrayList<PageFragment>();
+            fragmentList = new ArrayList<>();
         fragmentList.add(defaultFragment);
 
         for (int i =0;i<amountOfPages;i++) {
@@ -314,7 +282,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onConnected(){
                     //onInitializeButtonListeners();
-                    mService.send("getActions","0");
+                    mService.send("getActions","1");
                     mService.send("getProposals");
                 }
 
@@ -382,9 +350,9 @@ public class MainActivity extends AppCompatActivity {
             ;
 
     private void onStoreReceivedProposals(JSONArray jArray) {
-        proposals= new ArrayList<ProposalObject>();
+        proposals= new ArrayList<>();
         for (int i = 0; i < jArray.length(); i++) {
-            JSONObject jsonobject = null;
+            JSONObject jsonobject;
             try {
                 jsonobject = jArray.getJSONObject(i);
                 String porposalId = jsonobject.getString("_id");
@@ -401,9 +369,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void storeReceivedDevices(JSONArray jsonArray) {
-        deviceObjects= new ArrayList<DeviceObject>();
+        deviceObjects= new ArrayList<>();
         for (int i = 0; i < jsonArray.length(); i++) {
-            JSONObject jsonobject = null;
+            JSONObject jsonobject;
             try {
                 jsonobject = jsonArray.getJSONObject(i);
                 String id = (String) jsonobject.get("_id");
@@ -423,9 +391,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void onReceiveActions(JSONArray jsonArray) {
-        buttonObjects=new ArrayList<ButtonObject>();
+        buttonObjects=new ArrayList<>();
         for (int i = 0; i < jsonArray.length(); i++) {
-            JSONObject jsonobject = null;
+            JSONObject jsonobject;
             try {
                 jsonobject = jsonArray.getJSONObject(i);
                 String userId = jsonobject.getString("userID");//TestUser="1234abc"
@@ -443,5 +411,46 @@ public class MainActivity extends AppCompatActivity {
         }
         for(int i=0;i<fragmentList.size();i++)
             fragmentList.get(i).onUpdateButtons();
+    }
+
+    public SocketIOService getService() {
+        return mService;
+    }
+
+    public void testWithoutServer() {
+        buttonObjects = new ArrayList<>();
+
+        try {
+            String stringArray="[{\"_id\":\"irgubrkgb\",\"userID\":\"123abc\",\"device\":\"fsheufh\",\"subID\":0,\"name\":\"Red\",\"action\":\"turn bathroom-light red\",\"icon\":\"icon_lights_red.png\",\"proposal\":\"bsrgr8g\",\"__v\":0}]";
+            JSONArray reader = new JSONArray(stringArray);
+            Log.i("actionJsonArray %s", reader.toString());
+            onReceiveActions(reader);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+        deviceObjects = new ArrayList<>();
+
+        try {
+            String stringArray="[{\"_id\":\"fsheufh\",\"subID\":0,\"name\":\"bathroom-light\",\"type\":\"hue-light\"},{\"_id\":\"fsheufh\",\"subID\":1,\"name\":\"bedroom-light\",\"type\":\"hue-light\"}]\n";
+            JSONArray reader = new JSONArray(stringArray);
+            Log.i("actionJsonArray %s", reader.toString());
+            storeReceivedDevices(reader);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+        proposals = new ArrayList<>();
+
+        try {
+            String stringArray="[{\"_id\":\"bsrgr8g\",\"name\":\"Red\",\"type\":\"hue-light\",\"icon\":\"icon_lights_red.png\",\"action\":{\"rgb\":\"255,0,0\"},\"__v\":0},{\"_id\":\"kughsr4\",\"name\":\"Blue\",\"type\":\"hue-light\",\"icon\":\"icon_lights_blue.png\",\"action\":{\"rgb\":\"0,0,255\"},\"__v\":0},{\"_id\":\"izt498\",\"name\":\"Green\",\"type\":\"hue-light\",\"icon\":\"icon_lights_green.png\",\"action\":{\"rgb\":\"0,255,0\"},\"__v\":0}]";
+            JSONArray reader = new JSONArray(stringArray);
+            Log.i("actionJsonArray %s", reader.toString());
+            onStoreReceivedProposals(reader);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }
